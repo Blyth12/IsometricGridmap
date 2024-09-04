@@ -38,7 +38,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   imageMode(CENTER)
-  
+
   let totalWidth = (Xtiles + Ytiles) * tileOffsetC / 2
   let totalHeight = (Xtiles + Ytiles - 1) * tileOffsetR
 
@@ -55,8 +55,8 @@ function draw() {
   translate(width / 2, height / 2)
   scale(zoomLevel)
   translate(-width / 2, -height / 2)
-  
-  for (let gx = Xtiles - 1 ; gx >= 0; gx--) {
+
+  for (let gx = Xtiles - 1; gx >= 0; gx--) {
     for (let gy = 0; gy < Ytiles; gy++) {
       //selectionCheck(gx, gy)
       drawTile(gx, gy)
@@ -66,7 +66,7 @@ function draw() {
 
   pop()
   drawUI()
-  
+
 }
 
 function drawUI() {
@@ -74,16 +74,16 @@ function drawUI() {
   fill(255)
   noStroke()
   textFont()
-  text(tileX+" "+tileY, 20, 50)
-  text(floor(mouseX)+" "+floor(mouseY), 20, 150)
+  text(tileX + " " + tileY, 20, 50)
+  text(floor(mouseX) + " " + floor(mouseY), 20, 150)
 
   fill(0)
-  rect(20, windowHeight * 0.8 , 210, 55, 20)
+  rect(20, windowHeight * 0.8, 210, 55, 20)
   fill(255)
   text("Build", 50, windowHeight * 0.8 + 50)
 
   fill(0)
-  rect(20, windowHeight * 0.9 , 210, 55, 20)
+  rect(20, windowHeight * 0.9, 210, 55, 20)
   fill(255)
   text("Delete", 35, windowHeight * 0.9 + 50)
 }
@@ -101,9 +101,9 @@ function zoomOut() {
 }
 
 function hover(tileX, tileY) {
-  if (tileX >= 0 && tileX < Xtiles && tileY >=0 && tileY < Ytiles) {
+  if (tileX >= 0 && tileX < Xtiles && tileY >= 0 && tileY < Ytiles) {
     tileType = map[tileY][tileX]
-    map[tileY][tileX] = 3
+    map[tileY][tileX] = 4
   }
 }
 
@@ -114,7 +114,7 @@ function windowResized() {
 function drawTile(gx, gy) {
   offX = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX
   offY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
-  image(tiles[map[gy][gx]] , offX + tileOffsetC / 2, offY + tileOffsetR )
+  image(tiles[map[gy][gx]], offX + tileOffsetC / 2, offY + tileOffsetR)
 }
 
 // function selectionCheck(gx, gy) {
@@ -135,7 +135,7 @@ function keyPressed() {
 function mouseMoved() {
   let aMX = (mouseX - width / 2) / zoomLevel + width / 2
   let aMY = (mouseY - height / 2) / zoomLevel + height / 2
-  
+
   mX = aMX - tileOffsetC / 2 - originX
   mY = aMY - tileOffsetR / 2 - originY
 
@@ -151,6 +151,8 @@ function mouseClicked() {
     map[tileY][tileX] += 1
   }
 }
+
+//test
 
 
 
