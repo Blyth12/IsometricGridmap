@@ -1,4 +1,11 @@
 html {
   background-color: cyan;
   overflow: hidden;
+  border-width: 0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }

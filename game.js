@@ -13,8 +13,6 @@ let offX
 let offY
 let mX
 let mY
-let prevTileX
-let prevTileY
 let zoomLevel = 1
 const minZoom = 0.5
 const maxZoom = 3
@@ -105,7 +103,7 @@ function drawTile(gx, gy) {
   offY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
 
   if (gx == tileX && gy == tileY){
-    tint(255, 255, 0, 255)
+    tint(200, 150, 0, 255)
   }
   else{
     noTint()
@@ -115,6 +113,8 @@ function drawTile(gx, gy) {
 
   noTint()
 }
+
+//add to log - tint function for tile visual selection
 
 function keyPressed() {
   if (key === "=") {
