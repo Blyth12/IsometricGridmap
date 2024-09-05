@@ -13,6 +13,8 @@ let offX
 let offY
 let mX
 let mY
+let prevTileX
+let prevTileY
 let zoomLevel = 1
 const minZoom = 0.5
 const maxZoom = 3
@@ -58,9 +60,7 @@ function draw() {
 
   for (let gx = Xtiles - 1; gx >= 0; gx--) {
     for (let gy = 0; gy < Ytiles; gy++) {
-      //selectionCheck(gx, gy)
       drawTile(gx, gy)
-      hover(tileX, tileY)
     }
   }
 
@@ -88,23 +88,12 @@ function drawUI() {
   text("Delete", 35, windowHeight * 0.9 + 50)
 }
 
-
-
-//COLOR DE SELECCIONAR
-
 function zoomIn() {
   zoomLevel = constrain(zoomLevel + 0.1, minZoom, maxZoom)
 }
 
 function zoomOut() {
   zoomLevel = constrain(zoomLevel - 0.1, minZoom, maxZoom)
-}
-
-function hover(tileX, tileY) {
-  if (tileX >= 0 && tileX < Xtiles && tileY >= 0 && tileY < Ytiles) {
-    tileType = map[tileY][tileX]
-    map[tileY][tileX] = 4
-  }
 }
 
 function windowResized() {
@@ -114,14 +103,18 @@ function windowResized() {
 function drawTile(gx, gy) {
   offX = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX
   offY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
-  image(tiles[map[gy][gx]], offX + tileOffsetC / 2, offY + tileOffsetR)
-}
 
-// function selectionCheck(gx, gy) {
-//   if (gx == tileX && gy == tileY) {
-//     map[gy][gx] = 4
-//   }
-// }
+  if (gx == tileX && gy == tileY){
+    tint(255, 255, 0, 255)
+  }
+  else{
+    noTint()
+  }
+
+  image(tiles[map[gy][gx]], offX + tileOffsetC / 2, offY + tileOffsetR)
+
+  noTint()
+}
 
 function keyPressed() {
   if (key === "=") {
@@ -152,7 +145,6 @@ function mouseClicked() {
   }
 }
 
-//test
 
 
 

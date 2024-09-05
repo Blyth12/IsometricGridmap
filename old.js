@@ -43,3 +43,12 @@
 // originY = (height - totalHeight) / 2 + totalHeight / 2 - (height * 0.05)
 
 //-------------------------------------
+
+// function hover(tileX, tileY) {
+//   if (tileX >= 0 && tileX < Xtiles && tileY >= 0 && tileY < Ytiles) {
+//     tileType = map[tileY][tileX]
+//     map[tileY][tileX] = 4
+//   }
+// }
+
+//-------------------------------------
