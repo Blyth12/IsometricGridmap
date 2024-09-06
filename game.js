@@ -84,6 +84,16 @@ function drawUI() {
   rect(20, windowHeight * 0.9, 210, 55, 20)
   fill(255)
   text("Delete", 35, windowHeight * 0.9 + 50)
+
+  fill(0)
+  rect(windowWidth * 0.95 , windowHeight * 0.8, 50, 55, 20)
+  fill(255)
+  text("+", windowWidth * 0.95 + 5 , windowHeight * 0.8 + 50)
+
+  fill(0)
+  rect(windowWidth * 0.95 , windowHeight * 0.9, 50, 55, 20)
+  fill(255)
+  text("-", windowWidth * 0.95 + 15 , windowHeight * 0.9 + 50)
 }
 
 function zoomIn() {
@@ -103,7 +113,7 @@ function drawTile(gx, gy) {
   offY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
 
   if (gx == tileX && gy == tileY){
-    tint(200, 150, 0, 255)
+    tint(180, 180, 40, 255)
   }
   else{
     noTint()
@@ -142,6 +152,10 @@ function mouseClicked() {
   }
   else {
     map[tileY][tileX] += 1
+  }
+
+  if (mouseX >= 20 && mouseX <= 20 + 210 && mouseY >= windowHeight * 0.8 && mouseY <= windowHeight * 0.8 + 55 ) {  // writeup - code for button press detection
+    zoomIn()
   }
 }
 
