@@ -23,3 +23,5 @@ function windowResized() {
   setup()
 }
   
+
+//dont talk about menu until development log lol
