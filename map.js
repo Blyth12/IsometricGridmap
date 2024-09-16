@@ -22,6 +22,8 @@ function preload() {
     loadImage("img/grass.png"), //0
     loadImage("img/water.png"), //1
     loadImage("img/beach.png"), //2
+    //tracks
+    loadImage("img/trackonly.png") //3
   ]
 
   // 0 - Light green
@@ -53,6 +55,7 @@ function draw() {
   for (let gx = Xtiles - 1; gx >= 0; gx--) {
     for (let gy = 0; gy < Ytiles; gy++) {
       drawTile(gx, gy)
+      drawTracks(gx, gy)
     }
   }
 
@@ -118,6 +121,24 @@ function drawTile(gx, gy) {
   noTint()
 }
 
+function drawTracks(gx, gy) {
+  // offX = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX
+  // offY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
+
+  if (gx == tileX && gy == tileY){
+    tint(180, 180, 40, 255)
+  }
+  else{
+    noTint()
+  }
+
+  if (tracks[gy][gx] == 1) {
+    image(tiles[3], offX + tileOffsetC / 2, offY + tileOffsetR)
+  }
+
+  noTint()
+}
+
 //add to log - tint function for tile visual selection
 
 function keyPressed() {
@@ -151,6 +172,14 @@ function mouseClicked() {
   if (mouseX >= 20 && mouseX <= 20 + 210 && mouseY >= windowHeight * 0.8 && mouseY <= windowHeight * 0.8 + 55 ) {  // writeup - code for button press detection
     zoomIn()
   }
+
+  function buildTrack() {
+    if (gameMode = build) {
+      
+    }
+  }
+  //https://www.istockphoto.com/vector/railway-kit-gm1450125259-487130540
+  //write build mode + trCK PLACMENT ALGORITHMS
 }
 
 
