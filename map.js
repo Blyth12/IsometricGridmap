@@ -14,6 +14,8 @@ let offY
 let mX
 let mY
 let zoomLevel = 1
+let gameMode = "build" // view, build, delete
+let playerMoney = 1000
 const minZoom = 0.5
 const maxZoom = 3
 
@@ -162,11 +164,22 @@ function mouseMoved() {
 }
 
 function mouseClicked() {
-  if (map[tileY][tileX] == 2) {
-    map[tileY][tileX] = 0
+  if (gameMode == "view"){
+    if (map[tileY][tileX] == 2) {
+      map[tileY][tileX] = 0
+    }
+    else {
+      map[tileY][tileX] += 1
+    }
   }
-  else {
-    map[tileY][tileX] += 1
+
+  if (gameMode == "build"){
+    if (tracks[tileY][tileX] == 1) {
+      tracks[tileY][tileX] = 0
+    }
+    else {
+      tracks[tileY][tileX] = 1
+    }
   }
 
   if (mouseX >= 20 && mouseX <= 20 + 210 && mouseY >= windowHeight * 0.8 && mouseY <= windowHeight * 0.8 + 55 ) {  // writeup - code for button press detection
