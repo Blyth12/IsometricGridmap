@@ -66,6 +66,10 @@ let tracks = [
   [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
   [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
 ]
+// 0 - No track
+// 1 - North - South track
+// 2 - East - West track
+// 3 - 
 
 
 //writeup - array for buildings drawn ontop of map

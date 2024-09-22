@@ -124,8 +124,14 @@ function drawTile(gx, gy) {
 }
 
 function drawTracks(gx, gy) {
-  // offX = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX
-  // offY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
+  let trackOffX1 = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX
+  let trackOffY1 = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
+
+  let trackOffX2 = gx * tileOffsetC / 2 + (gy-1) * tileOffsetC / 2 + originX
+  let trackOffY2 = (gy-1) * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
+
+  let midX = (trackOffX1 + trackOffX2) / 2
+  let midY = (trackOffY1 + trackOffY2) / 2
 
   if (gx == tileX && gy == tileY){
     tint(180, 180, 40, 255)
@@ -135,7 +141,7 @@ function drawTracks(gx, gy) {
   }
 
   if (tracks[gy][gx] == 1) {
-    image(tiles[3], offX + tileOffsetC / 2, offY + tileOffsetR)
+    image(tiles[3], midX + tileOffsetC / 2, midY + tileOffsetR)
   }
 
   noTint()
