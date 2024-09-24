@@ -1,3 +1,4 @@
+//MAP
 let tileOffsetC = 100 // Width of tile img (100)
 let tileOffsetR2 = 65 // Height of tile img (65)
 let tileOffsetR = 50 // Height of tile img (exluding side) (50)
@@ -14,10 +15,12 @@ let offY
 let mX
 let mY
 let zoomLevel = 1
-let gameMode = "build" // view, build, delete
-let playerMoney = 1000
 const minZoom = 0.5
 const maxZoom = 3
+//USER
+let gameMode = 2 // 1: view, 2: build, 3: delete
+let newMode
+let playerMoney = 1000
 
 function preload() {
   tiles = [
@@ -73,6 +76,9 @@ function drawUI() {
   textFont()
   text(tileX + " " + tileY, 20, 50)
   text(floor(mouseX) + " " + floor(mouseY), 20, 150)
+  text(gameMode, 20, 250)
+
+  text("€" + playerMoney, 0.88 * windowWidth, 0.1 * windowHeight)
 
   fill(0)
   rect(20, windowHeight * 0.8, 210, 55, 20)
@@ -85,14 +91,14 @@ function drawUI() {
   text("Delete", 35, windowHeight * 0.9 + 50)
 
   fill(0)
-  rect(windowWidth * 0.95 , windowHeight * 0.8, 50, 55, 20)
+  rect(windowWidth * 0.95, windowHeight * 0.8, 50, 55, 20)
   fill(255)
-  text("+", windowWidth * 0.95 + 5 , windowHeight * 0.8 + 50)
+  text("+", windowWidth * 0.95 + 5, windowHeight * 0.8 + 50)
 
   fill(0)
-  rect(windowWidth * 0.95 , windowHeight * 0.9, 50, 55, 20)
+  rect(windowWidth * 0.95, windowHeight * 0.9, 50, 55, 20)
   fill(255)
-  text("-", windowWidth * 0.95 + 15 , windowHeight * 0.9 + 50)
+  text("-", windowWidth * 0.95 + 15, windowHeight * 0.9 + 50)
 }
 
 function zoomIn() {
@@ -111,10 +117,10 @@ function drawTile(gx, gy) {
   offX = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX
   offY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
 
-  if (gx == tileX && gy == tileY){
+  if (gx == tileX && gy == tileY && gameMode == 3) {
     tint(180, 180, 40, 255)
   }
-  else{
+  else {
     noTint()
   }
 
@@ -127,20 +133,20 @@ function drawTracks(gx, gy) {
   let trackOffX1 = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX
   let trackOffY1 = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
 
-  let trackOffX2 = gx * tileOffsetC / 2 + (gy-1) * tileOffsetC / 2 + originX
-  let trackOffY2 = (gy-1) * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
+  let trackOffX2 = gx * tileOffsetC / 2 + (gy - 1) * tileOffsetC / 2 + originX
+  let trackOffY2 = (gy - 1) * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
 
   let midX = (trackOffX1 + trackOffX2) / 2
   let midY = (trackOffY1 + trackOffY2) / 2
 
-  if (gx == tileX && gy == tileY){
+  if (gx == tileX && gy == tileY) {
     tint(180, 180, 40, 255)
   }
-  else{
+  else {
     noTint()
   }
 
-  if (gameMode == "build" && gx == tileX && gy == tileY) {
+  if (gameMode == 2 && gx == tileX && gy == tileY) {
     tint(200, 200, 0, 255)
     image(tiles[3], midX + tileOffsetC / 2, midY + tileOffsetR)
   }
@@ -175,36 +181,48 @@ function mouseMoved() {
 }
 
 function mouseClicked() {
-  if (gameMode == "view"){
-    if (map[tileY][tileX] == 2) {
-      map[tileY][tileX] = 0
-    }
-    else {
-      map[tileY][tileX] += 1
-    }
+  if (gameMode == 3) {
+    deleteTrack()
   }
 
-  if (gameMode == "build"){
-    if (tracks[tileY][tileX] == 1) {
-      tracks[tileY][tileX] = 0
-    }
-    else {
-      tracks[tileY][tileX] = 1
-    }
+  if (gameMode == 2) {
+    buildTrack()
   }
 
-  if (mouseX >= 20 && mouseX <= 20 + 210 && mouseY >= windowHeight * 0.8 && mouseY <= windowHeight * 0.8 + 55 ) {  // writeup - code for button press detection
-    zoomIn()
+  if (mouseX >= 20 && mouseX <= 20 + 210 && mouseY >= windowHeight * 0.8 && mouseY <= windowHeight * 0.8 + 55) {  // writeup - code for button press detection
+    changeMode(2)
   }
 
-  function buildTrack() {
-    if (gameMode = build) {
-      
-    }
+  if (mouseX >= 20 && mouseX <= 20 + 210 && mouseY >= windowHeight * 0.9 && mouseY <= windowHeight * 0.9 + 55) {  // writeup - code for button press detection
+    changeMode(3)
   }
-  //https://www.istockphoto.com/vector/railway-kit-gm1450125259-487130540
-  //write build mode + trCK PLACMENT ALGORITHMS
 }
+
+function buildTrack() {
+  if (tracks[tileY][tileX] == 0) {
+    tracks[tileY][tileX] = 1
+    playerMoney -= 100
+  }
+}
+
+function deleteTrack() {
+  if (tracks[tileY][tileX] == 1) {
+    tracks[tileY][tileX] = 0
+    playerMoney -= 50
+  }
+}
+
+function changeMode(newMode) {
+  gameMode = newMode
+}
+//https://www.istockphoto.com/vector/railway-kit-gm1450125259-487130540
+//write build mode + trCK PLACMENT ALGORITHMS
+//https://kenney.nl/assets/train-kit
+
+function beginGame() {
+  
+}
+
 
 
 
