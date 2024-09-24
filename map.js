@@ -140,6 +140,11 @@ function drawTracks(gx, gy) {
     noTint()
   }
 
+  if (gameMode == "build" && gx == tileX && gy == tileY) {
+    tint(200, 200, 0, 255)
+    image(tiles[3], midX + tileOffsetC / 2, midY + tileOffsetR)
+  }
+
   if (tracks[gy][gx] == 1) {
     image(tiles[3], midX + tileOffsetC / 2, midY + tileOffsetR)
   }
