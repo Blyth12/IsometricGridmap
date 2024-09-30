@@ -19,6 +19,7 @@ const minZoom = 0.5
 const maxZoom = 3
 //USER
 let gameMode = 2 // 1: view, 2: build, 3: delete
+let rotation = 0 // 0: NS, 1: EW, 2: 
 let newMode
 let playerMoney = 1000
 
@@ -27,8 +28,13 @@ function preload() {
     loadImage("img/grass.png"), //0
     loadImage("img/water.png"), //1
     loadImage("img/beach.png"), //2
-    //tracks
-    loadImage("img/trackonly.png") //3
+  ]
+
+  tracks = [
+    loadImage("img/trackNS.png"), //0
+    loadImage("img/trackEW.png")  // 1
+
+    //add one here to images
   ]
 
   // 0 - Light green
@@ -76,7 +82,7 @@ function drawUI() {
   textFont()
   text(tileX + " " + tileY, 20, 50)
   text(floor(mouseX) + " " + floor(mouseY), 20, 150)
-  text(gameMode, 20, 250)
+  text(gameMode + " " + rotation , 20, 250)
 
   text("€" + playerMoney, 0.88 * windowWidth, 0.1 * windowHeight)
 
@@ -124,7 +130,7 @@ function drawTile(gx, gy) {
     noTint()
   }
 
-  image(tiles[map[gy][gx]], offX + tileOffsetC / 2, offY + tileOffsetR)
+  image(tiles[mapState[gy][gx]], offX + tileOffsetC / 2, offY + tileOffsetR)
 
   noTint()
 }
@@ -148,11 +154,11 @@ function drawTracks(gx, gy) {
 
   if (gameMode == 2 && gx == tileX && gy == tileY) {
     tint(200, 200, 0, 255)
-    image(tiles[3], midX + tileOffsetC / 2, midY + tileOffsetR)
+    image(tracks[trackState[gy][gx]], midX + tileOffsetC / 2, midY + tileOffsetR)
   }
 
-  if (tracks[gy][gx] == 1) {
-    image(tiles[3], midX + tileOffsetC / 2, midY + tileOffsetR)
+  if (trackState[gy][gx] != 0) {
+    image(tracks[trackState[gy][gx]], midX + tileOffsetC / 2, midY + tileOffsetR)
   }
 
   noTint()
@@ -166,6 +172,18 @@ function keyPressed() {
   }
   if (key === "-") {
     zoomOut()
+  }
+  if (key === "1") {
+    changeMode(2)
+  }
+  if (key === "2") {
+    changeMode(3)
+  }
+  if (key === "e" && gameMode == 2){
+    rotateTrack()
+  }
+  if (key === "q" && gameMode == 2){
+    rotateTrack()
   }
 }
 
@@ -198,16 +216,25 @@ function mouseClicked() {
   }
 }
 
+function rotateTrack() {
+  if (rotation <= 1){
+    rotation += 1
+  }
+  else{
+    rotation = 0
+  }
+}
+
 function buildTrack() {
-  if (tracks[tileY][tileX] == 0) {
-    tracks[tileY][tileX] = 1
+  if (trackState[tileY][tileX] == 0) {
+    trackState[tileY][tileX] = 1 + rotation
     playerMoney -= 100
   }
 }
 
 function deleteTrack() {
-  if (tracks[tileY][tileX] == 1) {
-    tracks[tileY][tileX] = 0
+  if (trackState[tileY][tileX] == 1) {
+    trackState[tileY][tileX] = 0
     playerMoney -= 50
   }
 }
