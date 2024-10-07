@@ -31,8 +31,10 @@ function preload() {
   ]
 
   tracks = [
+    loadImage("img/trackNS.png"),
     loadImage("img/trackNS.png"), //0
-    loadImage("img/trackEW.png")  // 1
+    loadImage("img/trackEW.png"), // 1
+    loadImage("img/trackSE.png") //2
 
     //add one here to images
   ]
@@ -56,7 +58,7 @@ function setup() {
 }
 
 function draw() {
-  background('cyan');
+  background('turquoise');
 
   push()
   translate(width / 2, height / 2)
@@ -66,6 +68,11 @@ function draw() {
   for (let gx = Xtiles - 1; gx >= 0; gx--) {
     for (let gy = 0; gy < Ytiles; gy++) {
       drawTile(gx, gy)
+    }
+  }
+  
+  for (let gx = Xtiles - 1; gx >= 0; gx--) {
+    for (let gy = 0; gy < Ytiles; gy++) {
       drawTracks(gx, gy)
     }
   }
@@ -154,7 +161,7 @@ function drawTracks(gx, gy) {
 
   if (gameMode == 2 && gx == tileX && gy == tileY) {
     tint(200, 200, 0, 255)
-    image(tracks[trackState[gy][gx]], midX + tileOffsetC / 2, midY + tileOffsetR)
+    image(tracks[rotation + 1], midX + tileOffsetC / 2, midY + tileOffsetR)
   }
 
   if (trackState[gy][gx] != 0) {
@@ -217,7 +224,7 @@ function mouseClicked() {
 }
 
 function rotateTrack() {
-  if (rotation <= 1){
+  if (rotation < 2){
     rotation += 1
   }
   else{
@@ -233,9 +240,19 @@ function buildTrack() {
 }
 
 function deleteTrack() {
-  if (trackState[tileY][tileX] == 1) {
+  if (trackState[tileY][tileX] != 0) {
     trackState[tileY][tileX] = 0
     playerMoney -= 50
+  }
+}
+
+function trackLogic() {
+  for (let gx = Xtiles - 1; gx >= 0; gx--) {
+    for (let gy = 0; gy < Ytiles; gy++) {
+      if (trackState[gy][gx] != 0) {
+        console.log("Hi")
+      }
+    }
   }
 }
 
