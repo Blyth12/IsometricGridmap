@@ -1,4 +1,5 @@
-//MAP
+// VARIABLES SETUP
+//GAME
 let tileOffsetC = 100 // Width of tile img (100)
 let tileOffsetR2 = 65 // Height of tile img (65)
 let tileOffsetR = 50 // Height of tile img (exluding side) (50)
@@ -17,12 +18,16 @@ let mY
 let zoomLevel = 1
 const minZoom = 0.5
 const maxZoom = 3
+
 //USER
 let gameMode = 2 // 1: view, 2: build, 3: delete
-let rotation = 0 // 0: NS, 1: EW, 2: 
+let rotation = 0 // 0: NS, 1: EW, 2: SE, 3: NW
 let newMode
 let playerMoney = 1000
 
+
+
+// PRE LOAD FUNCTIONS
 function preload() {
   tiles = [
     loadImage("img/grass.png"), //0
@@ -55,8 +60,13 @@ function setup() {
   originY = height / 2 - (height * 0.05)
 
   console.log(totalWidth, totalHeight, width, height, originX, originY)
+  createTrackGrid()
 }
 
+
+
+//DRAW FUNCTIONS
+// Draw background and initialise drawing tracks and tiles in embedded for loops
 function draw() {
   background('turquoise');
 
@@ -82,6 +92,8 @@ function draw() {
 
 }
 
+
+//Draw UI elements + zoom
 function drawUI() {
   textSize(64)
   fill(255)
@@ -126,6 +138,8 @@ function windowResized() {
   setup()
 }
 
+
+//Tile drawing + hovering
 function drawTile(gx, gy) {
   offX = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX
   offY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
@@ -142,6 +156,8 @@ function drawTile(gx, gy) {
   noTint()
 }
 
+
+//Track drawing
 function drawTracks(gx, gy) {
   let trackOffX1 = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX
   let trackOffY1 = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
@@ -169,10 +185,12 @@ function drawTracks(gx, gy) {
   }
 
   noTint()
-}
+}  //add to log - tint function for tile visual selection
 
-//add to log - tint function for tile visual selection
 
+
+//USER INPUT FUNCTIONS
+//Keybinds
 function keyPressed() {
   if (key === "=") {
     zoomIn()
@@ -194,6 +212,8 @@ function keyPressed() {
   }
 }
 
+
+//Mouse coordinate calculations on mouse moved
 function mouseMoved() {
   let aMX = (mouseX - width / 2) / zoomLevel + width / 2
   let aMY = (mouseY - height / 2) / zoomLevel + height / 2
@@ -205,6 +225,8 @@ function mouseMoved() {
   tileY = floor(mX / tileOffsetC + mY / tileOffsetR)
 }
 
+
+//Varying functions for when mouse is clicked depending on the selected mode
 function mouseClicked() {
   if (gameMode == 3) {
     deleteTrack()
@@ -233,11 +255,43 @@ function rotateTrack() {
 }
 
 function buildTrack() {
-  if (trackState[tileY][tileX] == 0) {
-    trackState[tileY][tileX] = 1 + rotation
-    playerMoney -= 100
+  if(!trackGrid[tileY][tileX].hasTrack()) {
+    let trackBitmask
+    switch (rotation){
+      case 0:
+        trackBitmask = 1 + 4
+        break
+
+      case 1:
+        trackBitmask = 2 + 8
+        break
+
+      case 2:
+        trackBitmask = 2 + 4
+        break;
+  
+      case 3:
+        trackBitmask = 8 + 1
+        break
+    }
+    trackGrid[tileY][tileX].placeTrack(trackBitmask, tileY, tileX, rotation)
+    console.log(trackGrid[tileY][tileX])
   }
 }
+
+// function buildTrack() {
+//   // let currentTile = trackGrid[tileY][tileX]
+//   // console.log(currentTile)
+//   // if (!currentTile.hasTrack()) {
+//   //   let trackBitmask = 1 + rotation
+//   // }
+
+
+//   if (trackState[tileY][tileX] == 0) {
+//     trackState[tileY][tileX] = 1 + rotation
+//     playerMoney -= 100
+//   }
+// }
 
 function deleteTrack() {
   if (trackState[tileY][tileX] != 0) {
@@ -246,15 +300,7 @@ function deleteTrack() {
   }
 }
 
-function trackLogic() {
-  for (let gx = Xtiles - 1; gx >= 0; gx--) {
-    for (let gy = 0; gy < Ytiles; gy++) {
-      if (trackState[gy][gx] != 0) {
-        console.log("Hi")
-      }
-    }
-  }
-}
+
 
 function changeMode(newMode) {
   gameMode = newMode
