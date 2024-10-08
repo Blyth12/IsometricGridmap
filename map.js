@@ -141,10 +141,10 @@ function windowResized() {
 
 //Tile drawing + hovering
 function drawTile(gx, gy) {
-  offX = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX
+  offX = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX // Calculates the offset by multiplying the coordinate by 60, 
   offY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
 
-  if (gx == tileX && gy == tileY && gameMode == 3) {
+  if (gx == tileX && gy == tileY && gameMode == 2) { // Change to gameMode == 3 - Used to tint the selected tile
     tint(180, 180, 40, 255)
   }
   else {
@@ -159,16 +159,16 @@ function drawTile(gx, gy) {
 
 //Track drawing
 function drawTracks(gx, gy) {
-  let trackOffX1 = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX
+  let trackOffX1 = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX // Same calculations as offX in the above drawTile() function
   let trackOffY1 = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
 
-  let trackOffX2 = gx * tileOffsetC / 2 + (gy - 1) * tileOffsetC / 2 + originX
-  let trackOffY2 = (gy - 1) * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
+  let trackOffX2 = gx * tileOffsetC / 2 + (gy - 1) * tileOffsetC / 2 + originX // Calculation for the coordinates of the tile below the currently selected tile (gx, gy - 1)
+  let trackOffY2 = (gy - 1) * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY 
 
-  let midX = (trackOffX1 + trackOffX2) / 2
+  let midX = (trackOffX1 + trackOffX2) / 2 // Calculation of the midpoint between the two coordinates is calculated.
   let midY = (trackOffY1 + trackOffY2) / 2
 
-  if (gx == tileX && gy == tileY) {
+  if (gx == tileX && gy == tileY) { // If the current tile is the same as the one the mouse is hovered over, add tint to show selection
     tint(180, 180, 40, 255)
   }
   else {
