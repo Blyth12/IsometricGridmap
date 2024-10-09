@@ -162,8 +162,8 @@ function drawTracks(gx, gy) {
   let trackOffX1 = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX // Same calculations as offX in the above drawTile() function
   let trackOffY1 = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
 
-  let trackOffX2 = gx * tileOffsetC / 2 + (gy - 1) * tileOffsetC / 2 + originX // Calculation for the coordinates of the tile below the currently selected tile (gx, gy - 1)
-  let trackOffY2 = (gy - 1) * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY 
+  let trackOffX2 = (gx + 0) * tileOffsetC / 2 + (gy + 1) * tileOffsetC / 2 + originX // Calculation for the coordinates of the tile below the currently selected tile (gx, gy - 1)
+  let trackOffY2 = (gy + 1) * tileOffsetR / 2 - (gx + 0) * tileOffsetR / 2 + originY 
 
   let midX = (trackOffX1 + trackOffX2) / 2 // Calculation of the midpoint between the two coordinates is calculated.
   let midY = (trackOffY1 + trackOffY2) / 2
@@ -181,7 +181,38 @@ function drawTracks(gx, gy) {
   }
 
   if (trackState[gy][gx] != 0) {
-    image(tracks[trackState[gy][gx]], midX + tileOffsetC / 2, midY + tileOffsetR)
+    let currentTrack = trackState[gy][gx]
+    switch (currentTrack) {
+
+      case 1:
+        image(tracks[trackState[gy][gx]], midX + tileOffsetC / 2, midY + tileOffsetR)
+        break
+
+      case 2:
+        trackOffX2 = (gx + 1) * tileOffsetC / 2 + (gy + 0) * tileOffsetC / 2 + originX // Calculation for the coordinates of the tile below the currently selected tile (gx, gy - 1)
+        trackOffY2 = (gy + 0) * tileOffsetR / 2 - (gx + 1) * tileOffsetR / 2 + originY 
+      
+        midX = (trackOffX1 + trackOffX2) / 2 // Calculation of the midpoint between the two coordinates is calculated.
+        midY = (trackOffY1 + trackOffY2) / 2
+
+        image(tracks[trackState[gy][gx]], midX + tileOffsetC / 2, midY + tileOffsetR)
+        break
+
+      case 3:
+        trackOffX2 = (gx + 0) * tileOffsetC / 2 + (gy + 0) * tileOffsetC / 2 + originX // Calculation for the coordinates of the tile below the currently selected tile (gx, gy - 1)
+        trackOffY2 = (gy + 3) * tileOffsetR / 2 - (gx + 1) * tileOffsetR / 2 + originY 
+      
+        midX = (trackOffX1 + trackOffX2) / 2 // Calculation of the midpoint between the two coordinates is calculated.
+        midY = (trackOffY1 + trackOffY2) / 2
+
+        image(tracks[trackState[gy][gx]], midX + tileOffsetC / 2, midY + tileOffsetR - 5)
+        break
+
+      case 4:
+        image(tracks[trackState[gy][gx]], midX + tileOffsetC / 2, midY + tileOffsetR)
+        break
+
+    }
   }
 
   noTint()
