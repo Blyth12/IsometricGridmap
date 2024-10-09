@@ -38,8 +38,9 @@ function preload() {
   tracks = [
     loadImage("img/trackNS.png"),
     loadImage("img/trackNS.png"), //0
-    loadImage("img/trackEW.png"), // 1
-    loadImage("img/trackSE.png") //2
+    loadImage("img/trackEW.png"), //1
+    loadImage("img/trackSE.png"), //2
+    loadImage("img/trackNW.png")  //3
 
     //add one here to images
   ]
@@ -209,6 +210,12 @@ function drawTracks(gx, gy) {
         break
 
       case 4:
+        trackOffX2 = (gx + 2) * tileOffsetC / 2 + (gy + 0) * tileOffsetC / 2 + originX // Calculation for the coordinates of the tile below the currently selected tile (gx, gy - 1)
+        trackOffY2 = (gy - 1) * tileOffsetR / 2 - (gx - 1) * tileOffsetR / 2 + originY 
+      
+        midX = (trackOffX1 + trackOffX2) / 2 // Calculation of the midpoint between the two coordinates is calculated.
+        midY = (trackOffY1 + trackOffY2) / 2
+
         image(tracks[trackState[gy][gx]], midX + tileOffsetC / 2, midY + tileOffsetR)
         break
 
@@ -277,7 +284,7 @@ function mouseClicked() {
 }
 
 function rotateTrack() {
-  if (rotation < 2){
+  if (rotation < 3){
     rotation += 1
   }
   else{
