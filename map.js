@@ -36,11 +36,12 @@ function preload() {
   ]
 
   tracks = [
-    loadImage("img/trackNS.png"),
-    loadImage("img/trackNS.png"), //0
+
+    loadImage("img/trackNS.png"), //X
     loadImage("img/trackEW.png"), //1
-    loadImage("img/trackSE.png"), //2
-    loadImage("img/trackNW.png")  //3
+    loadImage("img/trackNW.png"), //2
+    loadImage("img/trackNS.png"), //3
+    loadImage("img/trackSE.png")  //4
 
     //add one here to images
   ]
@@ -101,7 +102,7 @@ function drawUI() {
   noStroke()
   textFont()
   text(tileX + " " + tileY, 20, 50)
-  text(floor(mouseX) + " " + floor(mouseY), 20, 150)
+  text(floor(mouseX) + " " + floor(mouseY), 20, 150) //Debug text
   text(gameMode + " " + rotation , 20, 250)
 
   text("€" + playerMoney, 0.88 * windowWidth, 0.1 * windowHeight)
@@ -145,7 +146,7 @@ function drawTile(gx, gy) {
   offX = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX // Calculates the offset by multiplying the coordinate by 60, 
   offY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
 
-  if (gx == tileX && gy == tileY && gameMode == 2) { // Change to gameMode == 3 - Used to tint the selected tile
+  if (gx == tileX && gy == tileY && (gameMode == 3 || gameMode == 1)) { // Change to gameMode == 3 - Used to tint the selected tile
     tint(180, 180, 40, 255)
   }
   else {
@@ -159,7 +160,8 @@ function drawTile(gx, gy) {
 
 
 //Track drawing
-function calculateOffset(a, b, c, d, gx, gy, trackOffX1, trackOffY1) {
+function calculateOffset(a, b, c, d, gx, gy, trackOffX1, trackOffY1) { //Used to calculate 
+
   trackOffX2 = (gx + a) * tileOffsetC / 2 + (gy + b) * tileOffsetC / 2 + originX // Calculation for the coordinates of the tile below the currently selected tile (gx, gy - 1)
   trackOffY2 = (gy + c) * tileOffsetR / 2 - (gx + d) * tileOffsetR / 2 + originY 
   midX = (trackOffX1 + trackOffX2) / 2 // Calculation of the midpoint between the two coordinates is calculated.
@@ -168,12 +170,14 @@ function calculateOffset(a, b, c, d, gx, gy, trackOffX1, trackOffY1) {
 }
 
 function drawAtCoordinates(gx, gy, midX, midY) { // Function used to draw tracks with correct rotation from switch statment
+
   if (trackState[gy][gx] != 0) {
     image(tracks[trackState[gy][gx]], midX + tileOffsetC / 2, midY + tileOffsetR)
   }
 }
 
-function preview(gx, gy, midX, midY) { // Function used to preview track placment with correct rotation from switch statment
+function placementPreview(gx, gy, midX, midY) { // Function used to preview track placment with correct rotation from switch statment
+
   if (gameMode == 2 && gx == tileX && gy == tileY) {
     tint(200, 200, 0, 255)
     image(tracks[rotation + 1], midX + tileOffsetC / 2, midY + tileOffsetR)
@@ -184,11 +188,6 @@ function drawTracks(gx, gy) {
   let trackOffX1 = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX // Same calculations as offX in the above drawTile() function
   let trackOffY1 = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
   let midX, midY
-  // let trackOffX2 = (gx + 0) * tileOffsetC / 2 + (gy + 1) * tileOffsetC / 2 + originX // Calculation for the coordinates of the tile below the currently selected tile (gx, gy - 1)
-  // let trackOffY2 = (gy + 1) * tileOffsetR / 2 - (gx + 0) * tileOffsetR / 2 + originY 
-
-  // let midX = (trackOffX1 + trackOffX2) / 2 // Calculation of the midpoint between the two coordinates is calculated.
-  // let midY = (trackOffY1 + trackOffY2) / 2
 
   if (gx == tileX && gy == tileY) { // If the current tile is the same as the one the mouse is hovered over, add tint to the tracks to show selection
     tint(180, 180, 40, 255)
@@ -197,81 +196,57 @@ function drawTracks(gx, gy) {
     noTint()
   }
 
-  switch(rotation) {
+  switch(rotation) { //Used to calculate and correctly display preview relative to the tile hovered over by the mouse
     case 0:
-      ({ midX, midY } = calculateOffset(0, 1, 1, 0, gx, gy, trackOffX1, trackOffY1))
-      // trackOffX2 = (gx + 0) * tileOffsetC / 2 + (gy + 1) * tileOffsetC / 2 + originX // Calculation for the coordinates of the tile below the currently selected tile (gx, gy - 1)
-      // trackOffY2 = (gy + 1) * tileOffsetR / 2 - (gx + 0) * tileOffsetR / 2 + originY 
-      // midX = (trackOffX1 + trackOffX2) / 2 // Calculation of the midpoint between the two coordinates is calculated.
-      // midY = (trackOffY1 + trackOffY2) / 2
-      preview(gx, gy, midX, midY)
+      ({ midX, midY } = calculateOffset(1, 0, 0, 1, gx, gy, trackOffX1, trackOffY1))
+      placementPreview(gx, gy, midX, midY)
       break
 
     case 1:
-      ({ midX, midY } = calculateOffset(1, 0, 0, 1, gx, gy, trackOffX1, trackOffY1))
-      // trackOffX2 = (gx + 1) * tileOffsetC / 2 + (gy + 0) * tileOffsetC / 2 + originX // Calculation for the coordinates of the tile below the currently selected tile (gx, gy - 1)
-      // trackOffY2 = (gy + 0) * tileOffsetR / 2 - (gx + 1) * tileOffsetR / 2 + originY 
-      // midX = (trackOffX1 + trackOffX2) / 2 // Calculation of the midpoint between the two coordinates is calculated.
-      // midY = (trackOffY1 + trackOffY2) / 2
-      preview(gx, gy, midX, midY)
+      ({ midX, midY } = calculateOffset(2, 0, -1, -1, gx, gy, trackOffX1, trackOffY1))
+      placementPreview(gx, gy, midX, midY)
       break
 
     case 2:
-      ({ midX, midY } = calculateOffset(0, 0, 3, 1, gx, gy, trackOffX1, trackOffY1))
-      // trackOffX2 = (gx + 0) * tileOffsetC / 2 + (gy + 0) * tileOffsetC / 2 + originX // Calculation for the coordinates of the tile below the currently selected tile (gx, gy - 1)
-      // trackOffY2 = (gy + 3) * tileOffsetR / 2 - (gx + 1) * tileOffsetR / 2 + originY 
-      // midX = (trackOffX1 + trackOffX2) / 2 // Calculation of the midpoint between the two coordinates is calculated.
-      // midY = (trackOffY1 + trackOffY2) / 2
-      preview(gx, gy, midX, midY)
+      ({ midX, midY } = calculateOffset(0, 1, 1, 0, gx, gy, trackOffX1, trackOffY1))
+      placementPreview(gx, gy, midX, midY)
       break
 
     case 3:
-      ({ midX, midY } = calculateOffset(2, 0, -1, -1, gx, gy, trackOffX1, trackOffY1))
-      // trackOffX2 = (gx + 2) * tileOffsetC / 2 + (gy + 0) * tileOffsetC / 2 + originX // Calculation for the coordinates of the tile below the currently selected tile (gx, gy - 1)
-      // trackOffY2 = (gy - 1) * tileOffsetR / 2 - (gx - 1) * tileOffsetR / 2 + originY 
-      // midX = (trackOffX1 + trackOffX2) / 2 // Calculation of the midpoint between the two coordinates is calculated.
-      // midY = (trackOffY1 + trackOffY2) / 2
-      preview(gx, gy, midX, midY)
+      ({ midX, midY } = calculateOffset(0, 0, 3, 1, gx, gy, trackOffX1, trackOffY1))
+      placementPreview(gx, gy, midX, midY)
       break
   }
 
   let currentTrack = trackState[gy][gx]
-  switch (currentTrack) {
+  switch (currentTrack) { //Used to calculate and corretly display tracks relative to the tile they are on
     case 1:
-      trackOffX2 = (gx + 0) * tileOffsetC / 2 + (gy + 1) * tileOffsetC / 2 + originX // Calculation for the coordinates of the tile below the currently selected tile (gx, gy - 1)
-      trackOffY2 = (gy + 1) * tileOffsetR / 2 - (gx + 0) * tileOffsetR / 2 + originY 
-      midX = (trackOffX1 + trackOffX2) / 2 // Calculation of the midpoint between the two coordinates is calculated.
-      midY = (trackOffY1 + trackOffY2) / 2
+      ({ midX, midY } = calculateOffset(1, 0, 0, 1, gx, gy, trackOffX1, trackOffY1))
       drawAtCoordinates(gx, gy, midX, midY)
       break
 
     case 2:
-      trackOffX2 = (gx + 1) * tileOffsetC / 2 + (gy + 0) * tileOffsetC / 2 + originX // Calculation for the coordinates of the tile below the currently selected tile (gx, gy - 1)
-      trackOffY2 = (gy + 0) * tileOffsetR / 2 - (gx + 1) * tileOffsetR / 2 + originY 
-      midX = (trackOffX1 + trackOffX2) / 2 // Calculation of the midpoint between the two coordinates is calculated.
-      midY = (trackOffY1 + trackOffY2) / 2
+      ({ midX, midY } = calculateOffset(2, 0, -1, -1, gx, gy, trackOffX1, trackOffY1))
       drawAtCoordinates(gx, gy, midX, midY)
       break
 
     case 3:
-      trackOffX2 = (gx + 0) * tileOffsetC / 2 + (gy + 0) * tileOffsetC / 2 + originX // Calculation for the coordinates of the tile below the currently selected tile (gx, gy - 1)
-      trackOffY2 = (gy + 3) * tileOffsetR / 2 - (gx + 1) * tileOffsetR / 2 + originY 
-      midX = (trackOffX1 + trackOffX2) / 2 // Calculation of the midpoint between the two coordinates is calculated.
-      midY = (trackOffY1 + trackOffY2) / 2
+      ({ midX, midY } = calculateOffset(0, 1, 1, 0, gx, gy, trackOffX1, trackOffY1))
       drawAtCoordinates(gx, gy, midX, midY)
       break
 
     case 4:
-      trackOffX2 = (gx + 2) * tileOffsetC / 2 + (gy + 0) * tileOffsetC / 2 + originX // Calculation for the coordinates of the tile below the currently selected tile (gx, gy - 1)
-      trackOffY2 = (gy - 1) * tileOffsetR / 2 - (gx - 1) * tileOffsetR / 2 + originY 
-      midX = (trackOffX1 + trackOffX2) / 2 // Calculation of the midpoint between the two coordinates is calculated.
-      midY = (trackOffY1 + trackOffY2) / 2
+      ({ midX, midY } = calculateOffset(0, 0, 3, 1, gx, gy, trackOffX1, trackOffY1))
       drawAtCoordinates(gx, gy, midX, midY)
       break
   }
 
   noTint()
 }  //add to log - tint function for tile visual selection
+
+function debug() {
+  console.log(trackGrid[tileY][tileX])
+}
 
 
 
@@ -285,16 +260,19 @@ function keyPressed() {
     zoomOut()
   }
   if (key === "1") {
-    changeMode(2)
+    changeMode(1)
   }
   if (key === "2") {
+    changeMode(2)
+  }
+  if (key === "3") {
     changeMode(3)
   }
   if (key === "e" && gameMode == 2){
-    rotateTrack()
+    rotateTrack(0)
   }
   if (key === "q" && gameMode == 2){
-    rotateTrack()
+    rotateTrack(1)
   }
 }
 
@@ -314,6 +292,10 @@ function mouseMoved() {
 
 //Varying functions for when mouse is clicked depending on the selected mode
 function mouseClicked() {
+  if (gameMode == 1) { //For controlling junctions
+    debug()
+  }
+
   if (gameMode == 3) {
     deleteTrack()
   }
@@ -331,62 +313,25 @@ function mouseClicked() {
   }
 }
 
-function rotateTrack() {
-  if (rotation < 3){
-    rotation += 1
-  }
-  else{
-    rotation = 0
-  }
-}
-
-function buildTrack() {
-  if(!trackGrid[tileY][tileX].hasTrack()) {
-    let trackBitmask
-    switch (rotation){
-      case 0:
-        trackBitmask = 1 + 4
-        break
-
-      case 1:
-        trackBitmask = 2 + 8
-        break
-
-      case 2:
-        trackBitmask = 2 + 4
-        break;
-  
-      case 3:
-        trackBitmask = 8 + 1
-        break
+function rotateTrack(a) {
+  if (a == 0) {
+    if (rotation < 3){
+      rotation += 1
     }
-    trackGrid[tileY][tileX].placeTrack(trackBitmask, tileY, tileX, rotation)
-    console.log(trackGrid[tileY][tileX])
+    else{
+      rotation = 0
+    }
+  }
+  
+  if (a == 1) {
+    if (rotation > 0){
+      rotation -= 1
+    }
+    else{
+      rotation = 3
+    }
   }
 }
-
-// function buildTrack() {
-//   // let currentTile = trackGrid[tileY][tileX]
-//   // console.log(currentTile)
-//   // if (!currentTile.hasTrack()) {
-//   //   let trackBitmask = 1 + rotation
-//   // }
-
-
-//   if (trackState[tileY][tileX] == 0) {
-//     trackState[tileY][tileX] = 1 + rotation
-//     playerMoney -= 100
-//   }
-// }
-
-function deleteTrack() {
-  if (trackState[tileY][tileX] != 0) {
-    trackState[tileY][tileX] = 0
-    playerMoney -= 50
-  }
-}
-
-
 
 function changeMode(newMode) {
   gameMode = newMode
