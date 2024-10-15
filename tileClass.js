@@ -10,11 +10,6 @@ class Tile {
         // this.rotation = 0
     }
 
-    placeTrack(trackBitmask) {
-        this.trackBitmask = trackBitmask
-        trackState[tileY][tileX] = rotation + 1
-    }
-
     removeTrack() {
         this.track = 0
         trackState[tileY][tileX] = 0
@@ -23,14 +18,6 @@ class Tile {
     hasTrack() {
         return this.track !== 0;
     }
-
-    // checkConnection(otherTile, direction) {
-    //     if (!otherTile.hasTrack()) return false
-
-    //     switch (direction)
-
-
-    // }
 
     checkDoublePlacement() {
 
@@ -48,33 +35,47 @@ function createTrackGrid() {
     }
 }
 
+function calculateBitmask(tileY, tileX, multiplier) {
+  console.log(multiplier)
+  let trackRotation = trackGrid[tileY][tileX].track
+  console.log(trackRotation)
+  switch (trackRotation){
+    case 1:
+      trackGrid[tileY][tileX].trackBitmask += multiplier * 8
+      trackGrid[tileY][tileX + 1].trackBitmask += multiplier * 128
+      break
+
+    case 2:
+      trackGrid[tileY][tileX].trackBitmask += multiplier * 16
+      trackGrid[tileY + 1][tileX + 1].trackBitmask += multiplier * 1
+      break
+
+    case 3:
+      trackGrid[tileY][tileX].trackBitmask += multiplier * 32
+      trackGrid[tileY + 1][tileX].trackBitmask += multiplier * 2
+      break;
+
+    case 4:
+      trackGrid[tileY][tileX].trackBitmask += multiplier * 64
+      trackGrid[tileY + 1][tileX - 1].trackBitmask += multiplier * 4
+      break
+  }
+}
+
 function buildTrack() {
     if(!trackGrid[tileY][tileX].hasTrack()) {
-      let trackBitmask
-      switch (rotation){
-        case 0:
-          trackBitmask = 8
-          break
-  
-        case 1:
-          trackBitmask = 16
-          break
-  
-        case 2:
-          trackBitmask = 32
-          break;
-    
-        case 3:
-          trackBitmask = 64
-          break
-      }
-      trackGrid[tileY][tileX].placeTrack(trackBitmask, tileY, tileX, rotation)
+      trackState[tileY][tileX] = rotation
+      trackGrid[tileY][tileX].track = rotation
+      calculateBitmask(tileY, tileX, 1)
+      playerMoney -= 100
     }
 }
   
 function deleteTrack() {
     if (trackState[tileY][tileX] != 0) {
+      calculateBitmask(tileY, tileX, -1)
       trackState[tileY][tileX] = 0
+      trackGrid[tileY][tileX].track = 0
       playerMoney -= 50
     }
 }

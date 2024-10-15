@@ -21,7 +21,7 @@ const maxZoom = 3
 
 //USER
 let gameMode = 2 // 1: view, 2: build, 3: delete
-let rotation = 0 // 0: NS, 1: EW, 2: SE, 3: NW
+let rotation = 1 // 1: NS, 2: EW, 3: SE, 4: NW
 let newMode
 let playerMoney = 1000
 
@@ -29,6 +29,9 @@ let playerMoney = 1000
 
 // PRE LOAD FUNCTIONS
 function preload() {
+
+  createTrackGrid() // Create array
+
   tiles = [
     loadImage("img/grass.png"), //0
     loadImage("img/water.png"), //1
@@ -62,7 +65,6 @@ function setup() {
   originY = height / 2 - (height * 0.05)
 
   console.log(totalWidth, totalHeight, width, height, originX, originY)
-  createTrackGrid()
 }
 
 
@@ -180,7 +182,7 @@ function placementPreview(gx, gy, midX, midY) { // Function used to preview trac
 
   if (gameMode == 2 && gx == tileX && gy == tileY) {
     tint(200, 200, 0, 255)
-    image(tracks[rotation + 1], midX + tileOffsetC / 2, midY + tileOffsetR)
+    image(tracks[rotation], midX + tileOffsetC / 2, midY + tileOffsetR)
   }
 }
 
@@ -197,22 +199,22 @@ function drawTracks(gx, gy) {
   }
 
   switch(rotation) { //Used to calculate and correctly display preview relative to the tile hovered over by the mouse
-    case 0:
+    case 1:
       ({ midX, midY } = calculateOffset(1, 0, 0, 1, gx, gy, trackOffX1, trackOffY1))
       placementPreview(gx, gy, midX, midY)
       break
 
-    case 1:
+    case 2:
       ({ midX, midY } = calculateOffset(2, 0, -1, -1, gx, gy, trackOffX1, trackOffY1))
       placementPreview(gx, gy, midX, midY)
       break
 
-    case 2:
+    case 3:
       ({ midX, midY } = calculateOffset(0, 1, 1, 0, gx, gy, trackOffX1, trackOffY1))
       placementPreview(gx, gy, midX, midY)
       break
 
-    case 3:
+    case 4:
       ({ midX, midY } = calculateOffset(0, 0, 3, 1, gx, gy, trackOffX1, trackOffY1))
       placementPreview(gx, gy, midX, midY)
       break
@@ -274,6 +276,9 @@ function keyPressed() {
   if (key === "q" && gameMode == 2){
     rotateTrack(1)
   }
+  if (key === "m" && gameMode == 2){
+    console.log(trackGrid)
+  }
 }
 
 
@@ -315,20 +320,20 @@ function mouseClicked() {
 
 function rotateTrack(a) {
   if (a == 0) {
-    if (rotation < 3){
+    if (rotation < 4){
       rotation += 1
     }
     else{
-      rotation = 0
+      rotation = 1
     }
   }
   
   if (a == 1) {
-    if (rotation > 0){
+    if (rotation > 1){
       rotation -= 1
     }
     else{
-      rotation = 3
+      rotation = 4
     }
   }
 }
