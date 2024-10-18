@@ -2,12 +2,16 @@ var trackGrid = [] //Global declaration
 
 class Tile {
     constructor() {
-        this.track = 0
+        this.track = [] // Used to store multiple tracks in an array
         this.trackBitmask = 0
-        this.trackOutgoingBitmask = 0
-        this.trackIncomingBitmask = 0
+        // this.trackOutgoingBitmask = 0
+        // this.trackIncomingBitmask = 0
         this.isCurved = false //Used to turn diagonals into curves
         // this.rotation = 0
+    }
+
+    addTrack(rotation) {
+      this.track.push(rotation)
     }
 
     removeTrack() {
@@ -63,18 +67,19 @@ function calculateBitmask(tileY, tileX, multiplier) {
 }
 
 function buildTrack() {
-    if(!trackGrid[tileY][tileX].hasTrack()) {
-      trackState[tileY][tileX] = rotation
-      trackGrid[tileY][tileX].track = rotation
-      calculateBitmask(tileY, tileX, 1)
-      playerMoney -= 100
-    }
+  // if(!trackGrid[tileY][tileX].hasTrack()) {
+    trackGrid[tileY][tileX].addTrack(rotation)
+    // trackState[tileY][tileX] = rotation
+    // trackGrid[tileY][tileX].track = rotation
+    calculateBitmask(tileY, tileX, 1)
+    playerMoney -= 100
+  // }
 }
   
 function deleteTrack() {
     if (trackState[tileY][tileX] != 0) {
       calculateBitmask(tileY, tileX, -1)
-      trackState[tileY][tileX] = 0
+      // trackState[tileY][tileX] = 0
       trackGrid[tileY][tileX].track = 0
       playerMoney -= 50
     }

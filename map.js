@@ -162,7 +162,7 @@ function drawTile(gx, gy) {
 
 
 //Track drawing
-function calculateOffset(a, b, c, d, gx, gy, trackOffX1, trackOffY1) { //Used to calculate 
+function calculateOffset(a, b, c, d, gx, gy, trackOffX1, trackOffY1) { //Used to calculate the offset to accurately preview / place the tracks with values from the switch statments
 
   trackOffX2 = (gx + a) * tileOffsetC / 2 + (gy + b) * tileOffsetC / 2 + originX // Calculation for the coordinates of the tile below the currently selected tile (gx, gy - 1)
   trackOffY2 = (gy + c) * tileOffsetR / 2 - (gx + d) * tileOffsetR / 2 + originY 
@@ -171,11 +171,11 @@ function calculateOffset(a, b, c, d, gx, gy, trackOffX1, trackOffY1) { //Used to
   return {midX, midY}
 }
 
-function drawAtCoordinates(gx, gy, midX, midY) { // Function used to draw tracks with correct rotation from switch statment
+function drawAtCoordinates(gx, gy, midX, midY, currentTrack) { // Function used to draw tracks with correct rotation from switch statment
 
-  if (trackState[gy][gx] != 0) {
-    image(tracks[trackState[gy][gx]], midX + tileOffsetC / 2, midY + tileOffsetR)
-  }
+  // if (trackState[gy][gx] != 0) {
+    image(tracks[currentTrack], midX + tileOffsetC / 2, midY + tileOffsetR)
+  // }
 }
 
 function placementPreview(gx, gy, midX, midY) { // Function used to preview track placment with correct rotation from switch statment
@@ -198,7 +198,7 @@ function drawTracks(gx, gy) {
     noTint()
   }
 
-  switch(rotation) { //Used to calculate and correctly display preview relative to the tile hovered over by the mouse
+  switch(rotation) { // Used to calculate and correctly display preview relative to the tile hovered over by the mouse
     case 1:
       ({ midX, midY } = calculateOffset(1, 0, 0, 1, gx, gy, trackOffX1, trackOffY1))
       placementPreview(gx, gy, midX, midY)
@@ -220,27 +220,31 @@ function drawTracks(gx, gy) {
       break
   }
 
-  let currentTrack = trackState[gy][gx]
-  switch (currentTrack) { //Used to calculate and corretly display tracks relative to the tile they are on
-    case 1:
-      ({ midX, midY } = calculateOffset(1, 0, 0, 1, gx, gy, trackOffX1, trackOffY1))
-      drawAtCoordinates(gx, gy, midX, midY)
-      break
+  if (trackGrid[gy][gx].track.length != 0){
+    for (let i = 0; i < trackGrid[gy][gx].track.length; i++) {
+      let currentTrack = trackGrid[gy][gx].track[i]
+      switch (currentTrack) { //Used to calculate and corretly display tracks relative to the tile they are on
+        case 1:
+          ({ midX, midY } = calculateOffset(1, 0, 0, 1, gx, gy, trackOffX1, trackOffY1))
+          drawAtCoordinates(gx, gy, midX, midY, currentTrack)
+          break
 
-    case 2:
-      ({ midX, midY } = calculateOffset(2, 0, -1, -1, gx, gy, trackOffX1, trackOffY1))
-      drawAtCoordinates(gx, gy, midX, midY)
-      break
+        case 2:
+          ({ midX, midY } = calculateOffset(2, 0, -1, -1, gx, gy, trackOffX1, trackOffY1))
+          drawAtCoordinates(gx, gy, midX, midY, currentTrack)
+          break
 
-    case 3:
-      ({ midX, midY } = calculateOffset(0, 1, 1, 0, gx, gy, trackOffX1, trackOffY1))
-      drawAtCoordinates(gx, gy, midX, midY)
-      break
+        case 3:
+          ({ midX, midY } = calculateOffset(0, 1, 1, 0, gx, gy, trackOffX1, trackOffY1))
+          drawAtCoordinates(gx, gy, midX, midY, currentTrack)
+          break
 
-    case 4:
-      ({ midX, midY } = calculateOffset(0, 0, 3, 1, gx, gy, trackOffX1, trackOffY1))
-      drawAtCoordinates(gx, gy, midX, midY)
-      break
+        case 4:
+          ({ midX, midY } = calculateOffset(0, 0, 3, 1, gx, gy, trackOffX1, trackOffY1))
+          drawAtCoordinates(gx, gy, midX, midY, currentTrack)
+          break
+      }
+    }
   }
 
   noTint()
@@ -248,6 +252,8 @@ function drawTracks(gx, gy) {
 
 function debug() {
   console.log(trackGrid[tileY][tileX])
+  console.log(trackGrid[tileY][tileX].track)
+  console.log(trackGrid[tileY][tileX].track.length)
 }
 
 
@@ -348,6 +354,8 @@ function changeMode(newMode) {
 function beginGame() {
   
 }
+
+
 
 
 
