@@ -15,12 +15,16 @@ class Tile {
     }
 
     removeTrack() {
-        this.track = 0
-        trackState[tileY][tileX] = 0
+        this.track = []
     }
 
-    hasTrack() {
-        return this.track !== 0;
+    hasTrackThere(rotation) {
+      for (let i = 0; i < trackGrid[tileY][tileX].track.length; i++) {
+        if (trackGrid[tileY][tileX].track[i] == rotation) {
+          console.log("Track there")
+          return this.track !== 0;
+        }
+      }
     }
 
     checkDoublePlacement() {
@@ -40,8 +44,9 @@ function createTrackGrid() {
 }
 
 function calculateBitmask(tileY, tileX, multiplier) {
-  console.log(multiplier)
-  let trackRotation = trackGrid[tileY][tileX].track
+  // console.log(multiplier)
+  let latest = trackGrid[tileY][tileX].track.length - 1
+  let trackRotation = trackGrid[tileY][tileX].track[latest]
   console.log(trackRotation)
   switch (trackRotation){
     case 1:
@@ -67,21 +72,16 @@ function calculateBitmask(tileY, tileX, multiplier) {
 }
 
 function buildTrack() {
-  // if(!trackGrid[tileY][tileX].hasTrack()) {
+  if(!trackGrid[tileY][tileX].hasTrackThere(rotation)) {
     trackGrid[tileY][tileX].addTrack(rotation)
-    // trackState[tileY][tileX] = rotation
-    // trackGrid[tileY][tileX].track = rotation
     calculateBitmask(tileY, tileX, 1)
     playerMoney -= 100
-  // }
+  }
 }
   
 function deleteTrack() {
-    if (trackState[tileY][tileX] != 0) {
       calculateBitmask(tileY, tileX, -1)
-      // trackState[tileY][tileX] = 0
-      trackGrid[tileY][tileX].track = 0
+      trackGrid[tileY][tileX].removeTrack()
       playerMoney -= 50
-    }
 }
 
