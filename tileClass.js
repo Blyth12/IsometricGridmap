@@ -4,10 +4,8 @@ class Tile {
     constructor() {
         this.track = [] // Used to store multiple tracks in an array
         this.trackBitmask = 0
-        // this.trackOutgoingBitmask = 0
-        // this.trackIncomingBitmask = 0
-        this.isCurved = false //Used to turn diagonals into curves
-        // this.rotation = 0
+        this.isCurved = false // Used to turn diagonals into curves
+        this.obstructed = false // Used to show if the tile is obstructed (no tracks can be placed here)
     }
 
     addTrack(rotation) {
@@ -43,8 +41,7 @@ function createTrackGrid() {
     }
 }
 
-function calculateBitmask(tileY, tileX, multiplier) {
-  // console.log(multiplier)
+function calculateBitmask(tileY, tileX, multiplier) { // This will calculate the tile bitmask value for any tracks placed / removed. See the bottom of the file for a diagram of the bitmask.
   let latest = trackGrid[tileY][tileX].track.length - 1
   let trackRotation = trackGrid[tileY][tileX].track[latest]
   console.log(trackRotation)
@@ -84,4 +81,15 @@ function deleteTrack() {
       trackGrid[tileY][tileX].removeTrack()
       playerMoney -= 50
 }
+
+
+// 1--------2--------4
+// |                 |
+// |                 |
+// |                 |
+// 128               8
+// |                 |
+// |                 |
+// |                 |
+// 64-------32-------16
 

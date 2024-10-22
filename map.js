@@ -160,6 +160,11 @@ function drawTile(gx, gy) {
   noTint()
 }
 
+//Object and building drawing
+function drawBuildings(gx, gy) {
+
+}
+
 
 //Track drawing
 function calculateOffset(a, b, c, d, gx, gy, trackOffX1, trackOffY1) { //Used to calculate the offset to accurately preview / place the tracks with values from the switch statments
@@ -282,10 +287,14 @@ function keyPressed() {
   if (key === "q" && gameMode == 2){
     rotateTrack(1)
   }
-  if (key === "m" && gameMode == 2){
+  if (key === "q" && gameMode == 1){
     console.log(trackGrid)
   }
+  if (key === "w" && gameMode == 1){
+    createRandomStation()
+  }
 }
+
 
 
 //Mouse coordinate calculations on mouse moved

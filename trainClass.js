@@ -1,4 +1,4 @@
-export class Pathfinding {
+class Pathfinding {
     constructor(map) {
         this.map = map
     }
@@ -8,7 +8,7 @@ export class Pathfinding {
     }
 }
 
-export class Train {
+class Train {
     constructor(x, y, map) {
         this.x = x
         this.y = y
