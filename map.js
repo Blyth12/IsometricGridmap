@@ -30,7 +30,8 @@ let playerMoney = 1000
 // PRE LOAD FUNCTIONS
 function preload() {
 
-  createTrackGrid() // Create array
+  createTrackGrid() // Create array for track placement
+  createBuildingGrid() // Create array for building placement
 
   tiles = [
     loadImage("img/grass.png"), //0
@@ -49,9 +50,10 @@ function preload() {
     //add one here to images
   ]
 
-  // 0 - Light green
-  // 1 - Blue
-  // 2 - Yellow
+  stations = [
+    loadImage("img/station/white.png"),
+  ]
+
 }
 
 function setup() {
@@ -88,6 +90,12 @@ function draw() {
   for (let gx = Xtiles - 1; gx >= 0; gx--) {
     for (let gy = 0; gy < Ytiles; gy++) {
       drawTracks(gx, gy)
+    }
+  }
+
+  for (let gx = Xtiles - 1; gx >= 0; gx--) {
+    for (let gy = 0; gy < Ytiles; gy++) {
+      drawBuildings(gx, gy)
     }
   }
 
@@ -148,7 +156,7 @@ function drawTile(gx, gy) {
   offX = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX // Calculates the offset by multiplying the coordinate by 60, 
   offY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
 
-  if (gx == tileX && gy == tileY && (gameMode == 3 || gameMode == 1)) { // Change to gameMode == 3 - Used to tint the selected tile
+  if (gx == tileX && gy == tileY && (gameMode == 3 || gameMode == 1)) { // Used to tint the selected tile
     tint(180, 180, 40, 255)
   }
   else {
@@ -162,7 +170,12 @@ function drawTile(gx, gy) {
 
 //Object and building drawing
 function drawBuildings(gx, gy) {
+  buildOffX = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX // Calculates the offset by multiplying the coordinate by 60, 
+  buildOffY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
 
+  if (buildingGrid[gy][gx] instanceof Station) {
+    image(stations[0], buildOffX + tileOffsetC / 2, buildOffY + tileOffsetR)
+  }
 }
 
 
@@ -292,6 +305,9 @@ function keyPressed() {
   }
   if (key === "w" && gameMode == 1){
     createRandomStation()
+  }
+  if (key === "e" && gameMode == 1){
+    console.log(buildingGrid)
   }
 }
 
