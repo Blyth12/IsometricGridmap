@@ -51,7 +51,7 @@ function preload() {
   ]
 
   stations = [
-    loadImage("img/station/white.png"),
+    loadImage("img/station/blue.png"),
   ]
 
 }
@@ -67,6 +67,7 @@ function setup() {
   originY = height / 2 - (height * 0.05)
 
   console.log(totalWidth, totalHeight, width, height, originX, originY)
+  beginGame()
 }
 
 
@@ -99,6 +100,12 @@ function draw() {
     }
   }
 
+  for (let gx = Xtiles - 1; gx >= 0; gx--) {
+    for (let gy = 0; gy < Ytiles; gy++) {
+      drawTrains(gx, gy)
+    }
+  }
+
   pop()
   drawUI()
 
@@ -114,6 +121,7 @@ function drawUI() {
   text(tileX + " " + tileY, 20, 50)
   text(floor(mouseX) + " " + floor(mouseY), 20, 150) //Debug text
   text(gameMode + " " + rotation , 20, 250)
+  text(elapsedTime , 20, 350)
 
   text("€" + playerMoney, 0.88 * windowWidth, 0.1 * windowHeight)
 
@@ -151,6 +159,8 @@ function windowResized() {
 }
 
 
+
+
 //Tile drawing + hovering
 function drawTile(gx, gy) {
   offX = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX // Calculates the offset by multiplying the coordinate by 60, 
@@ -168,13 +178,22 @@ function drawTile(gx, gy) {
   noTint()
 }
 
+function drawTrains(gx, gy) {
+  offX = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX // Calculates the offset by multiplying the coordinate by 60, 
+  offY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
+
+  for (let i = 0; trains.length; i++) {
+    console.log("H")
+  }
+}
+
 //Object and building drawing
 function drawBuildings(gx, gy) {
   buildOffX = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX // Calculates the offset by multiplying the coordinate by 60, 
   buildOffY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
 
   if (buildingGrid[gy][gx] instanceof Station) {
-    image(stations[0], buildOffX + tileOffsetC / 2, buildOffY + tileOffsetR)
+    image(stations[0], buildOffX + tileOffsetC / 2, buildOffY + tileOffsetR - 50)
   }
 }
 
@@ -309,6 +328,12 @@ function keyPressed() {
   if (key === "e" && gameMode == 1){
     console.log(buildingGrid)
   }
+  if (key === "r" && gameMode == 1){
+    spawnTrain()
+  }
+  if (key === "t" && gameMode == 1){
+    console.log(trains)
+  }
 }
 
 
@@ -372,12 +397,20 @@ function rotateTrack(a) {
 function changeMode(newMode) {
   gameMode = newMode
 }
+
 //https://www.istockphoto.com/vector/railway-kit-gm1450125259-487130540
 //write build mode + trCK PLACMENT ALGORITHMS
 //https://kenney.nl/assets/train-kit
 
+let elapsedTime = 0
+
+function tick() {
+  elapsedTime += 1
+}
+
 function beginGame() {
-  
+  setInterval(tick, 1000)
+  setInterval(createRandomStation, 1000)
 }
 
 

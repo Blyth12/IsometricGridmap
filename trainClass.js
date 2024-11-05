@@ -8,13 +8,19 @@ class Pathfinding {
     }
 }
 
+let trains = []
+
 class Train {
-    constructor(x, y, map) {
+    constructor(x, y) {
         this.x = x
         this.y = y
-        this.map = map
         this.path = []
         this.Pathfinding = new Pathfinding(map)
     }
 
+}
+
+
+function spawnTrain() {
+    trains.push(new Train(0, 0))
 }
