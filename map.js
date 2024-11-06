@@ -54,6 +54,10 @@ function preload() {
     loadImage("img/station/blue.png"),
   ]
 
+  trains = [
+    loadImage("img/train/train1hz.png"),
+  ]
+
 }
 
 function setup() {
@@ -182,8 +186,10 @@ function drawTrains(gx, gy) {
   offX = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX // Calculates the offset by multiplying the coordinate by 60, 
   offY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
 
-  for (let i = 0; trains.length; i++) {
-    console.log("H")
+  for (let i = 0; i < activeTrains.length; i++) {
+    if (gx == activeTrains[i].x && gy == activeTrains[i].y) {
+      image(trains[0], offX + tileOffsetC / 2, offY + tileOffsetR)
+    }
   }
 }
 
@@ -332,7 +338,7 @@ function keyPressed() {
     spawnTrain()
   }
   if (key === "t" && gameMode == 1){
-    console.log(trains)
+    console.log(activeTrains)
   }
 }
 
@@ -411,6 +417,7 @@ function tick() {
 function beginGame() {
   setInterval(tick, 1000)
   setInterval(createRandomStation, 1000)
+  setInterval(moveTrains, 1000)
 }
 
 
