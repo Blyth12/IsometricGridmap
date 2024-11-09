@@ -25,7 +25,7 @@ class Station {
 
 function createRandomStation() {
     let face = Math.floor(Math.random() * 4)
-    console.log(face)
+    // console.log(face)
     let coordinate
     switch (face) {
         case 0:
