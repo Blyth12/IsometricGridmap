@@ -52,3 +52,24 @@
 // }
 
 //-------------------------------------
+
+// switch (this.direction) {
+//     case 0: // North heading - Possible bitmasks, 1 , 2 , 4 , 
+
+//         switch (this.activeBitmask) {
+//             case 1:
+//                 this.activeBitmask
+//         }
+
+//         break
+
+//     case 1:
+//         break
+
+//     case 2:
+//         break
+
+//     case 3:
+//         break
+
+// }

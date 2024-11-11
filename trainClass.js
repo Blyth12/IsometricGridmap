@@ -26,17 +26,6 @@ const DIRECTIONS_CHECK = { // Every directions values. This means that north cou
     3: DIRECTIONS.W | DIRECTIONS.NW | DIRECTIONS.SW  // W : 128 | 1 | 64 = 193
 }
 
-
-class Pathfinding {
-    constructor(map) {
-        this.map = map
-    }   
-
-    findPath(start, end) {
-        //ALGORITHM HERE - RESEARCH A* ALGORITHM
-    }
-}
-
 let activeTrains = []
 
 class Train {
@@ -46,33 +35,46 @@ class Train {
         this.direction = 1 // 0 - North, 1 - East, 2 - South, 3 - West
         this.activeBitmask = 0
         this.path = []
-        this.Pathfinding = new Pathfinding(map)
     }
 
     move() {
-        this.activeBitmask = trackGrid[this.x][this.y].trackBitmask
-        console.log("Bitmask " + this.activeBitmask)
-        checkDirection(this.activeBitmask , this.direction)
-        // switch (this.direction) {
-        //     case 0: // North heading - Possible bitmasks, 1 , 2 , 4 , 
-
-        //         switch (this.activeBitmask) {
-        //             case 1:
-        //                 this.activeBitmask
-        //         }
-
-        //         break
-
-        //     case 1:
-        //         break
-
-        //     case 2:
-        //         break
-
-        //     case 3:
-        //         break
-
-        // }
+        this.activeBitmask = trackGrid[this.y][this.x].trackBitmask
+        console.log("bitmask " + this.activeBitmask)
+        console.log("direction " + checkDirection(this.activeBitmask , this.direction))
+        switch (checkDirection(this.activeBitmask , this.direction)) {
+            case 1:
+                this.x -= 1
+                this.y -= 1
+                this.direction = 2
+                break
+            case 2:
+                this.y -= 1
+                break
+            case 4:
+                this.x += 1
+                this.y -= 1
+                this.direction = 3
+                break
+            case 8:
+                this.x += 1
+                break
+            case 16:
+                this.x += 1
+                this.y += 1
+                this.direction = 0
+                break
+            case 32:
+                this.y += 1
+                break
+            case 64:
+                this.x -= 1
+                this.y += 1
+                this.direction = 1
+                break
+            case 128:
+                this.x += 1
+                break
+        }
     }
 }
 
@@ -93,6 +95,6 @@ function moveTrains() {
 
 function checkDirection(activeBitmask, direction) { // Used to check if there is a path in the direction the train is travelling
     let checkMask = DIRECTIONS_CHECK[direction] // Get the bitmask values for the trains direction
-    console.log(activeBitmask & checkMask)
-    return (activeBitmask & checkMask) != 0 // This performs the bitwise AND operation, where the two numbers binary values are compared to see if the current tile has any tracks in the direction of the trains direction
+    console.log("bitwise" + (activeBitmask & checkMask))
+    return (activeBitmask & checkMask) // This performs the bitwise AND operation, where the two numbers binary values are compared to see if the current tile has any tracks in the direction of the trains direction
 }
