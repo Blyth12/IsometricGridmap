@@ -32,6 +32,7 @@ function preload() {
 
   createTrackGrid() // Create array for track placement
   createBuildingGrid() // Create array for building placement
+  setTrackValues()
 
   tiles = [
     loadImage("img/grass.png"), //0
@@ -416,7 +417,7 @@ function tick() {
 
 function beginGame() {
   setInterval(tick, 1000)
-  setInterval(createRandomStation, 1000)
+  setInterval(createRandomStation, 10000)
   setInterval(moveTrains, 1000)
 }
 
