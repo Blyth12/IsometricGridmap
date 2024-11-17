@@ -95,6 +95,7 @@ function draw() {
   
   for (let gx = Xtiles - 1; gx >= 0; gx--) {
     for (let gy = 0; gy < Ytiles; gy++) {
+      checkTrack(gx, gy)
       drawTracks(gx, gy)
     }
   }

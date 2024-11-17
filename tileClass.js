@@ -165,55 +165,50 @@ class Tile {
         }
       }
     }
+}
 
-    checkTrack() {
-      for(let i = 0; i < allCombinations.length; i++){
-        if (allCombinations[i] == this.trackBitmask && this.locked == false) {
+function checkTrack(gx , gy) {
+  for(let i = 0; i < allCombinations.length; i++){
+    if (allCombinations[i] == trackGrid[gy][gx].trackBitmask) {
 
-          for(let i = 0; i < emptyCombinations.length; i++) {
-            if (emptyCombinations[i] == this.trackBitmask) {
-              this.trackType = 0
-              console.log("EMpty")
-            }
-          }
+      for(let i = 0; i < emptyCombinations.length; i++) {
+        if (emptyCombinations[i] == trackGrid[gy][gx].trackBitmask) {
+          trackGrid[gy][gx].trackType = 0
+          // console.log("EMpty")
+        }
+      }
 
-          for(let i = 0; i < straightCombinations.length; i++) {
-            if (straightCombinations[i] == this.trackBitmask) {
-              this.trackType = 1
-              console.log("Straight")
-            }
-          }
+      for(let i = 0; i < straightCombinations.length; i++) {
+        if (straightCombinations[i] == trackGrid[gy][gx].trackBitmask) {
+          trackGrid[gy][gx].trackType = 1
+          // console.log("Straight")
+        }
+      }
 
-          for(let i = 0; i < curveCombinations.length; i++) {
-            if (curveCombinations[i] == this.trackBitmask) {
-              this.trackType = 2
-              console.log("Curve")
-            }
-          }
+      for(let i = 0; i < curveCombinations.length; i++) {
+        if (curveCombinations[i] == trackGrid[gy][gx].trackBitmask) {
+          trackGrid[gy][gx].trackType = 2
+          // console.log("Curve")
+        }
+      }
 
-          for(let i = 0; i < junctionCombinations.length; i++) {
-            if (junctionCombinations[i] == this.trackBitmask) {
-              this.trackType = 3
-              this.locked = true
-              console.log("Junction")
-            }
-          }
+      for(let i = 0; i < junctionCombinations.length; i++) {
+        if (junctionCombinations[i] == trackGrid[gy][gx].trackBitmask) {
+          trackGrid[gy][gx].trackType = 3
+          trackGrid[gy][gx].locked = true
+          // console.log("Junction")
+        }
+      }
 
-          for(let i = 0; i < crossroadCombinations.length; i++) {
-            if (crossroadCombinations[i] == this.trackBitmask) {
-              this.trackType = 4
-              this.locked = true
-              console.log("crossroad")
-            }
-          }
-
-
-
-        
+      for(let i = 0; i < crossroadCombinations.length; i++) {
+        if (crossroadCombinations[i] == trackGrid[gy][gx].trackBitmask) {
+          trackGrid[gy][gx].trackType = 4
+          trackGrid[gy][gx].locked = true
+          // console.log("crossroad")
         }
       }
     }
-
+  }
 }
 
 function createTrackGrid() {
@@ -235,31 +230,31 @@ function calculateBitmask(tileY, tileX, multiplier) { // This will calculate the
     case 1:
       trackGrid[tileY][tileX].trackBitmask += multiplier * 8
       trackGrid[tileY][tileX + 1].trackBitmask += multiplier * 128
-      trackGrid[tileY][tileX].checkTrack()
+      // trackGrid[tileY][tileX].checkTrack()
       break
 
     case 2:
       trackGrid[tileY][tileX].trackBitmask += multiplier * 16
       trackGrid[tileY + 1][tileX + 1].trackBitmask += multiplier * 1
-      trackGrid[tileY][tileX].checkTrack()
+      // trackGrid[tileY][tileX].checkTrack()
       break
 
     case 3:
       trackGrid[tileY][tileX].trackBitmask += multiplier * 32
       trackGrid[tileY + 1][tileX].trackBitmask += multiplier * 2
-      trackGrid[tileY][tileX].checkTrack()
+      // trackGrid[tileY][tileX].checkTrack()
       break
 
     case 4:
       trackGrid[tileY][tileX].trackBitmask += multiplier * 64
       trackGrid[tileY + 1][tileX - 1].trackBitmask += multiplier * 4
-      trackGrid[tileY][tileX].checkTrack()
+      // trackGrid[tileY][tileX].checkTrack()
       break
   }
 }
 
 function buildTrack() {
-  if(!trackGrid[tileY][tileX].hasTrackThere(rotation)) {
+  if(!trackGrid[tileY][tileX].hasTrackThere(rotation) || trackGrid[tileY][tileX].locked == false) {
     trackGrid[tileY][tileX].addTrack(rotation)
     calculateBitmask(tileY, tileX, 1)
     playerMoney -= 100
