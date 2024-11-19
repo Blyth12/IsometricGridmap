@@ -32,47 +32,150 @@ class Train {
     constructor(x, y) {
         this.x = x
         this.y = y
-        this.direction = 1 // 0 - North, 1 - East, 2 - South, 3 - West
+        this.direction = 1 // 0-NW , 1-N , 2-NE , 3-E , 4-SE , 5-S , 6-SW , 7-W
         this.activeBitmask = 0
+        this.activeTrackType = 0
         this.path = []
+    }
+
+    decideNextDirection() {
+        this.activeTrackType = trackGrid[this.y][this.x].trackType
+        switch (this.activeTrackType) {
+
+            case 0: // Half
+                this.direction = (this.direction + 4) % 8
+                return this.direction
+    
+            case 1: // Straight
+                return this.direction
+    
+            case 2: // Curve
+            console.log("--Curve--")
+                let curveType = trackGrid[this.y][this.x].trackBitmask
+                console.log("Direction" + this.direction)
+                console.log("Bitmask" + curveType)
+
+                switch (this.direction) {
+
+                    case 0:
+                        if ((curveType & TRACKCURVE.SE[1]) == TRACKCURVE.SE[1]) {
+                            this.direction = 1
+                        }
+                        if ((curveType & TRACKCURVE.SE[0]) == TRACKCURVE.SE[0]) {
+                            this.direction = 7
+                        }
+                        return this.direction
+                    
+                    case 1:
+                        if ((curveType & TRACKCURVE.S[1]) == TRACKCURVE.S[1]) {
+                            this.direction = 2
+                        }
+                        if ((curveType & TRACKCURVE.S[0]) == TRACKCURVE.S[0]) {
+                            this.direction = 0
+                        }
+                        return this.direction
+
+                    case 2:
+                        if ((curveType & TRACKCURVE.SW[1]) == TRACKCURVE.SW[1]) {
+                            this.direction = 3
+                        }
+                        if ((curveType & TRACKCURVE.SW[0]) == TRACKCURVE.SW[0]) {
+                            this.direction = 1
+                        }
+                        return this.direction
+
+                    case 3:
+                        if ((curveType & TRACKCURVE.W[1]) == TRACKCURVE.W[1]) {
+                            this.direction = 4
+                        }
+                        if ((curveType & TRACKCURVE.W[0]) == TRACKCURVE.W[0]) {
+                            this.direction = 2
+                        }
+                        return this.direction
+
+                    case 4:
+                        if ((curveType & TRACKCURVE.NW[1]) == TRACKCURVE.NW[1]) {
+                            this.direction = 5
+                        }
+                        if ((curveType & TRACKCURVE.NW[0]) == TRACKCURVE.NW[0]) {
+                            this.direction = 3
+                        }
+                        return this.direction
+
+                    case 5:
+                        if ((curveType & TRACKCURVE.N[1]) == TRACKCURVE.N[1]) {
+                            this.direction = 6
+                        }
+                        if ((curveType & TRACKCURVE.N[0]) == TRACKCURVE.N[0]) {
+                            this.direction = 4
+                        }
+                        return this.direction
+
+                    case 6:
+                        if ((curveType & TRACKCURVE.NE[1]) == TRACKCURVE.NE[1]) {
+                            this.direction = 7
+                        }
+                        if ((curveType & TRACKCURVE.NE[0]) == TRACKCURVE.NE[0]) {
+                            this.direction = 5
+                        }
+                        return this.direction
+
+                    case 7:
+                        if ((curveType & TRACKCURVE.E[1]) == TRACKCURVE.E[1]) {
+                            this.direction = 0
+                        }
+                        if ((curveType & TRACKCURVE.E[0]) == TRACKCURVE.E[0]) {
+                            this.direction = 6
+                        }
+                        return this.direction
+                    
+                }
+
+
+
+
+    
+            case 3: // Junction
+    
+            case 4: // Crossroad
+                return this.direction
+        }
     }
 
     move() {
         this.activeBitmask = trackGrid[this.y][this.x].trackBitmask
-        console.log("bitmask " + this.activeBitmask)
-        console.log("direction " + checkDirection(this.activeBitmask , this.direction))
-        switch (checkDirection(this.activeBitmask , this.direction)) {
-            case 1:
+        let nextDirection = this.decideNextDirection()
+        // console.log("bitmask " + this.activeBitmask)
+        // console.log("direction " + checkDirection(this.activeBitmask , this.direction))
+        // switch (checkDirection(this.activeBitmask , this.direction)) {
+        switch (nextDirection) {
+            case 0:
                 this.x -= 1
                 this.y -= 1
-                this.direction = 2
+                break
+            case 1:
+                this.y -= 1
                 break
             case 2:
+                this.x += 1
                 this.y -= 1
+                break
+            case 3:
+                this.x += 1
                 break
             case 4:
                 this.x += 1
-                this.y -= 1
-                this.direction = 3
-                break
-            case 8:
-                this.x += 1
-                break
-            case 16:
-                this.x += 1
-                this.y += 1
-                this.direction = 0
-                break
-            case 32:
                 this.y += 1
                 break
-            case 64:
+            case 5:
+                this.y += 1
+                break
+            case 6:
                 this.x -= 1
                 this.y += 1
-                this.direction = 1
                 break
-            case 128:
-                this.x += 1
+            case 7:
+                this.x -= 1
                 break
         }
     }
@@ -98,3 +201,8 @@ function checkDirection(activeBitmask, direction) { // Used to check if there is
     console.log("bitwise" + (activeBitmask & checkMask))
     return (activeBitmask & checkMask) // This performs the bitwise AND operation, where the two numbers binary values are compared to see if the current tile has any tracks in the direction of the trains direction
 }
+
+
+
+//check direction
+// check 

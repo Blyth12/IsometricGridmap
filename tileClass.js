@@ -61,36 +61,36 @@ const TRACKJUNCTION = {
 
 const TRACKCURVE = {
   N: {
-    0: TRACKDIR.N | TRACKDIR.SW,
-    1: TRACKDIR.N | TRACKDIR.SE },
+    0: TRACKDIR.N | TRACKDIR.SE, // Left
+    1: TRACKDIR.N | TRACKDIR.SW }, // Right
 
   S: {
-    0: TRACKDIR.S | TRACKDIR.NW,
-    1: TRACKDIR.S | TRACKDIR.NE },
+    0: TRACKDIR.S | TRACKDIR.NW, // Left
+    1: TRACKDIR.S | TRACKDIR.NE }, // Right
 
   E: {
-    0: TRACKDIR.E | TRACKDIR.NW,
-    1: TRACKDIR.E | TRACKDIR.SW },
+    0: TRACKDIR.E | TRACKDIR.SW, // left
+    1: TRACKDIR.E | TRACKDIR.NW }, // Right
 
   W: {
-    0: TRACKDIR.W | TRACKDIR.NE,
-    1: TRACKDIR.W | TRACKDIR.SE },
+    0: TRACKDIR.W | TRACKDIR.NE, // Left
+    1: TRACKDIR.W | TRACKDIR.SE }, // Right
 
   NE: {
-    0: TRACKDIR.NE | TRACKDIR.S,
-    1: TRACKDIR.NE | TRACKDIR.W },
+    0: TRACKDIR.NE | TRACKDIR.S, // Left
+    1: TRACKDIR.NE | TRACKDIR.W }, // Right
 
   SE: {
-    0: TRACKDIR.SE | TRACKDIR.N,
-    1: TRACKDIR.SE | TRACKDIR.W },
+    0: TRACKDIR.SE | TRACKDIR.W, // Left
+    1: TRACKDIR.SE | TRACKDIR.N }, // Right
 
   NW: {
-    0: TRACKDIR.NW | TRACKDIR.S,
-    1: TRACKDIR.NW | TRACKDIR.E },
+    1: TRACKDIR.NW | TRACKDIR.S, // Left
+    0: TRACKDIR.NW | TRACKDIR.E }, // Right
 
   SW: {
-    0: TRACKDIR.SW | TRACKDIR.N,
-    1: TRACKDIR.SW | TRACKDIR.E }
+    0: TRACKDIR.SW | TRACKDIR.N, // Left
+    1: TRACKDIR.SW | TRACKDIR.E } // Right
 }
 
 let allCombinations = []
@@ -129,11 +129,11 @@ function setTrackValues() {
       allCombinations.push(TRACKCURVE[curveType][curveDirection])
     }
   }
-  console.log(emptyCombinations)
-  console.log(straightCombinations)
-  console.log(junctionCombinations)
+  // console.log(emptyCombinations)
+  // console.log(straightCombinations)
+  // console.log(junctionCombinations)
   console.log(curveCombinations)
-  console.log(crossroadCombinations)
+  // console.log(crossroadCombinations)
 }
 
 class Tile {
@@ -142,6 +142,7 @@ class Tile {
         this.newBitmask = 0
         this.trackBitmask = 0
         this.trackType = 0 // 0: Half, 1: Straight, 2: Curve, 3: Junction, 4: Crossroad
+        this.activeJunction = 0 // 0 left 1 right
         this.isCurved = false // Used to turn diagonals into curves
         this.obstructed = false // Used to show if the tile is obstructed (no tracks can be placed here)
         this.locked = false
@@ -254,7 +255,7 @@ function calculateBitmask(tileY, tileX, multiplier) { // This will calculate the
 }
 
 function buildTrack() {
-  if(!trackGrid[tileY][tileX].hasTrackThere(rotation) || trackGrid[tileY][tileX].locked == false) {
+  if(!trackGrid[tileY][tileX].hasTrackThere(rotation) && trackGrid[tileY][tileX].locked == false) {
     trackGrid[tileY][tileX].addTrack(rotation)
     calculateBitmask(tileY, tileX, 1)
     playerMoney -= 100
