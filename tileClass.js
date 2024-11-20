@@ -1,3 +1,6 @@
+//PRESET TRACK VALUES DEFENITION
+
+
 // 1--------2--------4
 // |                 |
 // |                 |
@@ -7,8 +10,6 @@
 // |                 |
 // |                 |
 // 64-------32-------16
-
-var trackGrid = [] //Global declaration
 
 const TRACKDIR = {
   N: 2,
@@ -33,30 +34,31 @@ const TRACKCROSSROAD = {
   1: TRACKSTRAIGHT.SWNE | TRACKSTRAIGHT.NWSE
 }
 
+// 0-NW , 1-N , 2-NE , 3-E , 4-SE , 5-S , 6-SW , 7-W
 const TRACKJUNCTION = {
   NS: { 
-    NE: TRACKSTRAIGHT.NS | TRACKDIR.NE,
-    NW: TRACKSTRAIGHT.NS | TRACKDIR.NW,
-    SE: TRACKSTRAIGHT.NS | TRACKDIR.SE,
-    SW: TRACKSTRAIGHT.NS | TRACKDIR.SW },
+    0: TRACKSTRAIGHT.NS | TRACKDIR.NE, // Dir 1
+    1: TRACKSTRAIGHT.NS | TRACKDIR.NW, // Dir 1
+    2: TRACKSTRAIGHT.NS | TRACKDIR.SE, // Dir 5
+    3: TRACKSTRAIGHT.NS | TRACKDIR.SW }, // Dir 5
 
   EW: { 
-    NE: TRACKSTRAIGHT.EW | TRACKDIR.NE,
-    NW: TRACKSTRAIGHT.EW | TRACKDIR.NW,
-    SE: TRACKSTRAIGHT.EW | TRACKDIR.SE,
-    SW: TRACKSTRAIGHT.EW | TRACKDIR.SW },
+    0: TRACKSTRAIGHT.EW | TRACKDIR.NE, // Dir 7
+    1: TRACKSTRAIGHT.EW | TRACKDIR.SE, // Dir 7
+    2: TRACKSTRAIGHT.EW | TRACKDIR.NW, // Dir 3
+    3: TRACKSTRAIGHT.EW | TRACKDIR.SW }, // Dir 3
 
   SWNE: {
-    N: TRACKSTRAIGHT.SWNE | TRACKDIR.N,
-    S: TRACKSTRAIGHT.SWNE | TRACKDIR.S,
-    E: TRACKSTRAIGHT.SWNE | TRACKDIR.E,
-    W: TRACKSTRAIGHT.SWNE | TRACKDIR.W },
+    0: TRACKSTRAIGHT.SWNE | TRACKDIR.N, // Dir 2
+    1: TRACKSTRAIGHT.SWNE | TRACKDIR.E, // Dir 2
+    2: TRACKSTRAIGHT.SWNE | TRACKDIR.S, // Dir 6
+    3: TRACKSTRAIGHT.SWNE | TRACKDIR.W }, // Dir 6
 
   NWSE: {
-    N: TRACKSTRAIGHT.NWSE | TRACKDIR.N,
-    S: TRACKSTRAIGHT.NWSE | TRACKDIR.S,
-    E: TRACKSTRAIGHT.NWSE | TRACKDIR.E,
-    W: TRACKSTRAIGHT.NWSE | TRACKDIR.W }
+    0: TRACKSTRAIGHT.NWSE | TRACKDIR.N, // Dir 0
+    1: TRACKSTRAIGHT.NWSE | TRACKDIR.W, // Dir 0
+    2: TRACKSTRAIGHT.NWSE | TRACKDIR.S, // Dir 4
+    3: TRACKSTRAIGHT.NWSE | TRACKDIR.E } // Dir 4
 }
 
 const TRACKCURVE = {
@@ -136,13 +138,19 @@ function setTrackValues() {
   // console.log(crossroadCombinations)
 }
 
+
+//TRACK TILE CLASS
+
+
+var trackGrid = [] //Global declaration
+
 class Tile {
     constructor() {
         this.track = [] // Used to store multiple tracks in an array
         this.newBitmask = 0
         this.trackBitmask = 0
         this.trackType = 0 // 0: Half, 1: Straight, 2: Curve, 3: Junction, 4: Crossroad
-        this.activeJunction = 0 // 0 left 1 right
+        this.activeJunction = 1 // 0 straight 1 turn
         this.isCurved = false // Used to turn diagonals into curves
         this.obstructed = false // Used to show if the tile is obstructed (no tracks can be placed here)
         this.locked = false
@@ -275,15 +283,4 @@ function deleteTrack() {
       trackGrid[tileY][tileX].removeTrack()
       playerMoney -= 50
 }
-
-
-// 1--------2--------4
-// |                 |
-// |                 |
-// |                 |
-// 128               8
-// |                 |
-// |                 |
-// |                 |
-// 64-------32-------16
 

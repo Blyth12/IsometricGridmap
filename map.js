@@ -337,7 +337,7 @@ function keyPressed() {
     console.log(buildingGrid)
   }
   if (key === "r" && gameMode == 1){
-    spawnTrain()
+    spawnTrain(10,10)
   }
   if (key === "t" && gameMode == 1){
     console.log(activeTrains)

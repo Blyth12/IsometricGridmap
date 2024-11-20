@@ -29,13 +29,12 @@ const DIRECTIONS_CHECK = { // Every directions values. This means that north cou
 let activeTrains = []
 
 class Train {
-    constructor(x, y) {
+    constructor(x, y, dir) {
         this.x = x
         this.y = y
-        this.direction = 1 // 0-NW , 1-N , 2-NE , 3-E , 4-SE , 5-S , 6-SW , 7-W
+        this.direction = dir // 0-NW , 1-N , 2-NE , 3-E , 4-SE , 5-S , 6-SW , 7-W
         this.activeBitmask = 0
         this.activeTrackType = 0
-        this.path = []
     }
 
     decideNextDirection() {
@@ -54,7 +53,6 @@ class Train {
                 let curveType = trackGrid[this.y][this.x].trackBitmask
                 console.log("Direction" + this.direction)
                 console.log("Bitmask" + curveType)
-
                 switch (this.direction) {
 
                     case 0:
@@ -131,11 +129,105 @@ class Train {
                     
                 }
 
-
-
-
-    
             case 3: // Junction
+            console.log("Junction")
+            let junctionType = trackGrid[this.y][this.x].trackBitmask
+            let junctionToggle = trackGrid[this.y][this.x].activeJunction   
+
+                switch (this.direction) {
+                    case 0 || 4:
+                        if ((junctionType & TRACKJUNCTION.NWSE[0]) == TRACKJUNCTION.NWSE[0]) {
+                            if (this.direction == 0) { this.direction = this.direction += junctionToggle }
+                            if (this.direction == 4) { if (junctionToggle == 1) {this.direction = 4} } // Turn around if junction is blocking
+                            return this.direction
+                        }
+                        if ((junctionType & TRACKJUNCTION.NWSE[1]) == TRACKJUNCTION.NWSE[1]) {
+                            if (this.direction == 0) { this.direction = this.direction += junctionToggle }
+                            if (this.direction == 4) { if (junctionToggle == 1) {this.direction = 4} } // Turn around if junction is blocking
+                            return this.direction
+                        }
+                        if ((junctionType & TRACKJUNCTION.NWSE[2]) == TRACKJUNCTION.NWSE[2]) {
+                            if (this.direction == 4) { this.direction = this.direction += junctionToggle }
+                            if (this.direction == 0) { if (junctionToggle == 1) {this.direction = 0} } // Turn around if junction is blocking
+                            return this.direction
+                        }
+                        if ((junctionType & TRACKJUNCTION.NWSE[3]) == TRACKJUNCTION.NWSE[3]) {
+                            if (this.direction == 4) { this.direction = this.direction += junctionToggle }
+                            if (this.direction == 0) { if (junctionToggle == 1) {this.direction = 0} } // Turn around if junction is blocking
+                            return this.direction
+                        }
+
+                    case 1 || 5 || 6 || 4 || 0 || 2:
+                        console.log("Direction: " + this.direction)
+                        if ((junctionType & TRACKJUNCTION.NS[0]) == TRACKJUNCTION.NS[0]) {
+                            if (this.direction == 1) { this.direction = this.direction += junctionToggle }
+                            if (this.direction == 5) { if (junctionToggle == 1) {this.direction = 1} } // Turn around if junction is blocking
+                            if (this.direction == 6) { this.direction = 5 }
+                            return this.direction
+                        }
+                        if ((junctionType & TRACKJUNCTION.NS[1]) == TRACKJUNCTION.NS[1]) {
+                            if (this.direction == 1) { this.direction = this.direction += junctionToggle }
+                            if (this.direction == 5) { if (junctionToggle == 1) {this.direction = 1} } // Turn around if junction is blocking
+                            if (this.direction == 4) { this.direction = 5 }
+                            return this.direction
+                        }
+                        if ((junctionType & TRACKJUNCTION.NS[2]) == TRACKJUNCTION.NS[2]) {
+                            if (this.direction == 5) { this.direction = this.direction += junctionToggle }
+                            if (this.direction == 1) { if (junctionToggle == 1) {this.direction = 5} } // Turn around if junction is blocking
+                            if (this.direction == 0) { this.direction = 1 }
+                            return this.direction
+                        }
+                        if ((junctionType & TRACKJUNCTION.NS[3]) == TRACKJUNCTION.NS[3]) {
+                            if (this.direction == 5) { this.direction = this.direction += junctionToggle }
+                            if (this.direction == 1) { if (junctionToggle == 1) {this.direction = 5} } // Turn around if junction is blocking
+                            if (this.direction == 2) { this.direction = 1 }
+                            return this.direction
+                        }
+
+                    case 2 || 6:
+                        if ((junctionType & TRACKJUNCTION.SWNE[0]) == TRACKJUNCTION.SWNE[0]) {
+                            if (this.direction == 2) { this.direction = this.direction += junctionToggle }
+                            if (this.direction == 6) { if (junctionToggle == 1) {this.direction = 2} } // Turn around if junction is blocking
+                            return this.direction
+                        }
+                        if ((junctionType & TRACKJUNCTION.SWNE[1]) == TRACKJUNCTION.SWNE[1]) {
+                            if (this.direction == 2) { this.direction = this.direction += junctionToggle }
+                            if (this.direction == 6) { if (junctionToggle == 1) {this.direction = 2} } // Turn around if junction is blocking
+                            return this.direction
+                        }
+                        if ((junctionType & TRACKJUNCTION.SWNE[2]) == TRACKJUNCTION.SWNE[2]) {
+                            if (this.direction == 6) { this.direction = this.direction += junctionToggle }
+                            if (this.direction == 2) { if (junctionToggle == 1) {this.direction = 6} } // Turn around if junction is blocking
+                            return this.direction
+                        }
+                        if ((junctionType & TRACKJUNCTION.SWNE[3]) == TRACKJUNCTION.SWNE[3]) {
+                            if (this.direction == 6) { this.direction = this.direction += junctionToggle }
+                            if (this.direction == 2) { if (junctionToggle == 1) {this.direction = 6} } // Turn around if junction is blocking
+                            return this.direction
+                        }
+
+                    case 3 || 7:
+                        if ((junctionType & TRACKJUNCTION.EW[0]) == TRACKJUNCTION.EW[0]) {
+                            if (this.direction == 7) { this.direction = this.direction += junctionToggle }
+                            if (this.direction == 3) { if (junctionToggle == 1) {this.direction = 7} } // Turn around if junction is blocking
+                            return this.direction
+                        }
+                        if ((junctionType & TRACKJUNCTION.EW[1]) == TRACKJUNCTION.EW[1]) {
+                            if (this.direction == 7) { this.direction = this.direction += junctionToggle }
+                            if (this.direction == 3) { if (junctionToggle == 1) {this.direction = 7} } // Turn around if junction is blocking
+                            return this.direction
+                        }
+                        if ((junctionType & TRACKJUNCTION.EW[2]) == TRACKJUNCTION.EW[2]) {
+                            if (this.direction == 3) { this.direction = this.direction += junctionToggle }
+                            if (this.direction == 7) { if (junctionToggle == 1) {this.direction = 3} } // Turn around if junction is blocking
+                            return this.direction
+                        }
+                        if ((junctionType & TRACKJUNCTION.EW[3]) == TRACKJUNCTION.EW[3]) {
+                            if (this.direction == 3) { this.direction = this.direction += junctionToggle }
+                            if (this.direction == 7) { if (junctionToggle == 1) {this.direction = 3} } // Turn around if junction is blocking
+                            return this.direction
+                        }
+                }
     
             case 4: // Crossroad
                 return this.direction
@@ -149,41 +241,43 @@ class Train {
         // console.log("direction " + checkDirection(this.activeBitmask , this.direction))
         // switch (checkDirection(this.activeBitmask , this.direction)) {
         switch (nextDirection) {
+            case -1:
+                break
             case 0:
-                this.x -= 1
-                this.y -= 1
+                if(this.x != 0) {this.x -= 1} // if statments prevent the train going off the map!
+                if(this.y != 0) {this.y -= 1}
                 break
             case 1:
-                this.y -= 1
+                if(this.y != 0) {this.y -= 1}
                 break
             case 2:
-                this.x += 1
-                this.y -= 1
+                if(this.x != 19) {this.x += 1}
+                if(this.y != 0) {this.y -= 1}
                 break
             case 3:
-                this.x += 1
+                if(this.x != 19) {this.x += 1}
                 break
             case 4:
-                this.x += 1
-                this.y += 1
+                if(this.x != 19) {this.x += 1}
+                if(this.y != 19) {this.y += 1}
                 break
             case 5:
-                this.y += 1
+                if(this.y != 19) {this.y += 1}
                 break
             case 6:
-                this.x -= 1
-                this.y += 1
+                if(this.x != 0) {this.x -= 1}
+                if(this.y != 19) {this.y += 1}
                 break
             case 7:
-                this.x -= 1
+                if(this.x != 0) {this.x -= 1}
                 break
         }
     }
 }
 
 
-function spawnTrain() {
-    activeTrains.push(new Train(10, 10))
+function spawnTrain(x, y, dir) {
+    activeTrains.push(new Train(x, y, dir))
 }
 
 function removeTrain() {
@@ -196,11 +290,11 @@ function moveTrains() {
       }
 }
 
-function checkDirection(activeBitmask, direction) { // Used to check if there is a path in the direction the train is travelling
-    let checkMask = DIRECTIONS_CHECK[direction] // Get the bitmask values for the trains direction
-    console.log("bitwise" + (activeBitmask & checkMask))
-    return (activeBitmask & checkMask) // This performs the bitwise AND operation, where the two numbers binary values are compared to see if the current tile has any tracks in the direction of the trains direction
-}
+// function checkDirection(activeBitmask, direction) { // Used to check if there is a path in the direction the train is travelling
+//     let checkMask = DIRECTIONS_CHECK[direction] // Get the bitmask values for the trains direction
+//     console.log("bitwise" + (activeBitmask & checkMask))
+//     return (activeBitmask & checkMask) // This performs the bitwise AND operation, where the two numbers binary values are compared to see if the current tile has any tracks in the direction of the trains direction
+// }
 
 
 
