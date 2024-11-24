@@ -168,8 +168,8 @@ class Tile {
     }
 
     hasTrackThere(rotation) {
-      for (let i = 0; i < trackGrid[tileY][tileX].track.length; i++) {
-        if (trackGrid[tileY][tileX].track[i] == rotation) {
+      for (let i = 0; i < this.track.length; i++) {
+        if (this.track[i] == rotation) {
           console.log("Track there")
           return this.track !== 0;
         }
@@ -264,7 +264,7 @@ function calculateBitmask(tileY, tileX, multiplier) { // This will calculate the
 }
 
 function buildTrack() {
-  if(!trackGrid[tileY][tileX].hasTrackThere(rotation) && trackGrid[tileY][tileX].locked == false) {
+  if((!trackGrid[tileY][tileX].hasTrackThere(rotation)) && (trackGrid[tileY][tileX].locked == false)) {
     trackGrid[tileY][tileX].addTrack(rotation)
     calculateBitmask(tileY, tileX, 1)
     playerMoney -= 100

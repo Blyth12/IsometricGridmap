@@ -23,7 +23,7 @@ const maxZoom = 3
 let gameMode = 2 // 1: view, 2: build, 3: delete
 let rotation = 1 // 1: NS, 2: EW, 3: SE, 4: NW
 let newMode
-let playerMoney = 1000
+let playerMoney = 10000
 
 
 
@@ -53,6 +53,9 @@ function preload() {
 
   stations = [
     loadImage("img/station/blue.png"),
+    loadImage("img/station/red.png"),
+    loadImage("img/station/green.png"),
+    loadImage("img/station/purple.png"),
   ]
 
   trains = [
@@ -202,7 +205,7 @@ function drawBuildings(gx, gy) {
   buildOffY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
 
   if (buildingGrid[gy][gx] instanceof Station) {
-    image(stations[0], buildOffX + tileOffsetC / 2, buildOffY + tileOffsetR - 50)
+    image(stations[buildingGrid[gy][gx].colour], buildOffX + tileOffsetC / 2, buildOffY + tileOffsetR - 50)
   }
 }
 
@@ -401,11 +404,11 @@ function mouseClicked() {
     changeJunction()
   }
 
-  if (gameMode == 3) {
+  if (gameMode == 3 && playerMoney >= 50) {
     deleteTrack()
   }
 
-  if (gameMode == 2) {
+  if (gameMode == 2 && playerMoney >= 100) {
     buildTrack()
   }
 
