@@ -134,100 +134,128 @@ class Train {
             let junctionType = trackGrid[this.y][this.x].trackBitmask
             let junctionToggle = trackGrid[this.y][this.x].activeJunction   
 
-                switch (this.direction) {
-                    case 0 || 4:
+                // switch (this.direction) {
+                    // case 0 || 4:
                         if ((junctionType & TRACKJUNCTION.NWSE[0]) == TRACKJUNCTION.NWSE[0]) {
+                            console.log("NWSE0 "+TRACKJUNCTION.NWSE[0])
                             if (this.direction == 0) { this.direction = this.direction += junctionToggle }
                             if (this.direction == 4) { if (junctionToggle == 1) {this.direction = 4} } // Turn around if junction is blocking
+                            if (this.direction == 5) { this.direction = 4 }
                             return this.direction
                         }
                         if ((junctionType & TRACKJUNCTION.NWSE[1]) == TRACKJUNCTION.NWSE[1]) {
+                            console.log("NWSE1 "+TRACKJUNCTION.NWSE[1])
                             if (this.direction == 0) { this.direction = this.direction += junctionToggle }
                             if (this.direction == 4) { if (junctionToggle == 1) {this.direction = 4} } // Turn around if junction is blocking
+                            if (this.direction == 3) { this.direction = 4 }
                             return this.direction
                         }
                         if ((junctionType & TRACKJUNCTION.NWSE[2]) == TRACKJUNCTION.NWSE[2]) {
+                            console.log("NWSE2 "+TRACKJUNCTION.NWSE[2])
                             if (this.direction == 4) { this.direction = this.direction += junctionToggle }
                             if (this.direction == 0) { if (junctionToggle == 1) {this.direction = 0} } // Turn around if junction is blocking
+                            if (this.direction == 7) { this.direction = 0 }
                             return this.direction
                         }
                         if ((junctionType & TRACKJUNCTION.NWSE[3]) == TRACKJUNCTION.NWSE[3]) {
+                            console.log("NWSE3 "+TRACKJUNCTION.NWSE[3])
                             if (this.direction == 4) { this.direction = this.direction += junctionToggle }
                             if (this.direction == 0) { if (junctionToggle == 1) {this.direction = 0} } // Turn around if junction is blocking
+                            if (this.direction == 1) { this.direction = 0 }
                             return this.direction
                         }
 
-                    case 1 || 5 || 6 || 4 || 0 || 2:
+                    // case 1 || 5 || 6 || 4 || 0 || 2:
                         console.log("Direction: " + this.direction)
                         if ((junctionType & TRACKJUNCTION.NS[0]) == TRACKJUNCTION.NS[0]) {
+                            console.log("NS0 "+TRACKJUNCTION.NS[0])
                             if (this.direction == 1) { this.direction = this.direction += junctionToggle }
                             if (this.direction == 5) { if (junctionToggle == 1) {this.direction = 1} } // Turn around if junction is blocking
                             if (this.direction == 6) { this.direction = 5 }
                             return this.direction
                         }
                         if ((junctionType & TRACKJUNCTION.NS[1]) == TRACKJUNCTION.NS[1]) {
+                            console.log("NS1 "+TRACKJUNCTION.NS[1])
                             if (this.direction == 1) { this.direction = this.direction += junctionToggle }
                             if (this.direction == 5) { if (junctionToggle == 1) {this.direction = 1} } // Turn around if junction is blocking
                             if (this.direction == 4) { this.direction = 5 }
                             return this.direction
                         }
                         if ((junctionType & TRACKJUNCTION.NS[2]) == TRACKJUNCTION.NS[2]) {
-                            if (this.direction == 5) { this.direction = this.direction += junctionToggle }
+                            console.log("NS2 "+TRACKJUNCTION.NS[2])
+                            if (this.direction == 5) { this.direction = this.direction -= junctionToggle }
                             if (this.direction == 1) { if (junctionToggle == 1) {this.direction = 5} } // Turn around if junction is blocking
                             if (this.direction == 0) { this.direction = 1 }
                             return this.direction
                         }
                         if ((junctionType & TRACKJUNCTION.NS[3]) == TRACKJUNCTION.NS[3]) {
+                            console.log("NS3 "+TRACKJUNCTION.NS[3])
                             if (this.direction == 5) { this.direction = this.direction += junctionToggle }
                             if (this.direction == 1) { if (junctionToggle == 1) {this.direction = 5} } // Turn around if junction is blocking
                             if (this.direction == 2) { this.direction = 1 }
                             return this.direction
                         }
 
-                    case 2 || 6:
+                    // case 2 || 6:
                         if ((junctionType & TRACKJUNCTION.SWNE[0]) == TRACKJUNCTION.SWNE[0]) {
+                            console.log("SWNE0 "+TRACKJUNCTION.SWNE[0])
                             if (this.direction == 2) { this.direction = this.direction += junctionToggle }
                             if (this.direction == 6) { if (junctionToggle == 1) {this.direction = 2} } // Turn around if junction is blocking
+                            if (this.direction == 7) { this.direction = 6 }
                             return this.direction
                         }
                         if ((junctionType & TRACKJUNCTION.SWNE[1]) == TRACKJUNCTION.SWNE[1]) {
+                            console.log("SWNE1 "+TRACKJUNCTION.SWNE[1])
                             if (this.direction == 2) { this.direction = this.direction += junctionToggle }
                             if (this.direction == 6) { if (junctionToggle == 1) {this.direction = 2} } // Turn around if junction is blocking
+                            if (this.direction == 5) { this.direction = 6 }
                             return this.direction
                         }
                         if ((junctionType & TRACKJUNCTION.SWNE[2]) == TRACKJUNCTION.SWNE[2]) {
+                            console.log("SWNE2 "+TRACKJUNCTION.SWNE[2])
                             if (this.direction == 6) { this.direction = this.direction += junctionToggle }
                             if (this.direction == 2) { if (junctionToggle == 1) {this.direction = 6} } // Turn around if junction is blocking
+                            if (this.direction == 1) { this.direction = 2 }
                             return this.direction
                         }
                         if ((junctionType & TRACKJUNCTION.SWNE[3]) == TRACKJUNCTION.SWNE[3]) {
+                            console.log("SWNE3 "+TRACKJUNCTION.SWNE[3])
                             if (this.direction == 6) { this.direction = this.direction += junctionToggle }
                             if (this.direction == 2) { if (junctionToggle == 1) {this.direction = 6} } // Turn around if junction is blocking
+                            if (this.direction == 3) { this.direction = 2 }
                             return this.direction
                         }
 
-                    case 3 || 7:
+                    // case 3 || 7:
                         if ((junctionType & TRACKJUNCTION.EW[0]) == TRACKJUNCTION.EW[0]) {
-                            if (this.direction == 7) { this.direction = this.direction += junctionToggle }
-                            if (this.direction == 3) { if (junctionToggle == 1) {this.direction = 7} } // Turn around if junction is blocking
+                            console.log("EW0 "+TRACKJUNCTION.EW[0])
+                            if (this.direction == 3) { this.direction = this.direction -= junctionToggle }
+                            if (this.direction == 7) { if (junctionToggle == 1) {this.direction = 7} } // Turn around if junction is blocking
+                            if (this.direction == 6) { this.direction = 7 }
                             return this.direction
                         }
                         if ((junctionType & TRACKJUNCTION.EW[1]) == TRACKJUNCTION.EW[1]) {
-                            if (this.direction == 7) { this.direction = this.direction += junctionToggle }
-                            if (this.direction == 3) { if (junctionToggle == 1) {this.direction = 7} } // Turn around if junction is blocking
+                            console.log("EW1 "+TRACKJUNCTION.EW[1])
+                            if (this.direction == 3) { this.direction = this.direction += junctionToggle }
+                            if (this.direction == 7) { if (junctionToggle == 1) {this.direction = 7} } // Turn around if junction is blocking
+                            if (this.direction == 0) { this.direction = 7 }
                             return this.direction
                         }
                         if ((junctionType & TRACKJUNCTION.EW[2]) == TRACKJUNCTION.EW[2]) {
-                            if (this.direction == 3) { this.direction = this.direction += junctionToggle }
-                            if (this.direction == 7) { if (junctionToggle == 1) {this.direction = 3} } // Turn around if junction is blocking
+                            console.log("EW2 "+TRACKJUNCTION.EW[2])
+                            if (this.direction == 7) { this.direction = (this.direction += junctionToggle) % 8 }
+                            if (this.direction == 3) { if (junctionToggle == 1) {this.direction = 3} } // Turn around if junction is blocking
+                            if (this.direction == 4) { this.direction = 3 }
                             return this.direction
                         }
                         if ((junctionType & TRACKJUNCTION.EW[3]) == TRACKJUNCTION.EW[3]) {
-                            if (this.direction == 3) { this.direction = this.direction += junctionToggle }
-                            if (this.direction == 7) { if (junctionToggle == 1) {this.direction = 3} } // Turn around if junction is blocking
+                            console.log("EW3 "+TRACKJUNCTION.EW[3])
+                            if (this.direction == 7) { this.direction = (this.direction += junctionToggle) % 8 }
+                            if (this.direction == 3) { if (junctionToggle == 1) {this.direction = 3} } // Turn around if junction is blocking
+                            if (this.direction == 2) { this.direction = 3 }
                             return this.direction
                         }
-                }
+                // }
     
             case 4: // Crossroad
                 return this.direction

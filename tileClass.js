@@ -154,6 +154,7 @@ class Tile {
         this.isCurved = false // Used to turn diagonals into curves
         this.obstructed = false // Used to show if the tile is obstructed (no tracks can be placed here)
         this.locked = false
+        this.occupied = false // Train ontop
     }
 
     addTrack(rotation) {

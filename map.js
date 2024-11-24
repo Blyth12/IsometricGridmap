@@ -102,13 +102,14 @@ function draw() {
 
   for (let gx = Xtiles - 1; gx >= 0; gx--) {
     for (let gy = 0; gy < Ytiles; gy++) {
-      drawBuildings(gx, gy)
+      junctionSwitch(gx, gy)
     }
   }
 
   for (let gx = Xtiles - 1; gx >= 0; gx--) {
     for (let gy = 0; gy < Ytiles; gy++) {
       drawTrains(gx, gy)
+      drawBuildings(gx, gy)
     }
   }
 
@@ -172,7 +173,7 @@ function drawTile(gx, gy) {
   offX = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX // Calculates the offset by multiplying the coordinate by 60, 
   offY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
 
-  if (gx == tileX && gy == tileY && (gameMode == 3 || gameMode == 1)) { // Used to tint the selected tile
+  if (gx == tileX && gy == tileY && (gameMode == 3)) { // Used to tint the selected tile
     tint(180, 180, 40, 255)
   }
   else {
@@ -228,6 +229,34 @@ function placementPreview(gx, gy, midX, midY) { // Function used to preview trac
   if (gameMode == 2 && gx == tileX && gy == tileY) {
     tint(200, 200, 0, 255)
     image(tracks[rotation], midX + tileOffsetC / 2, midY + tileOffsetR)
+  }
+}
+
+function junctionSwitch(gx, gy) { //  Draw junction switch
+  if (gameMode == 1 && trackGrid[gy][gx].trackType == 3) {
+    let x = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX + 50
+    let y = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY + 42.5
+    if (trackGrid[gy][gy].occupied == true) {
+      stroke(0)
+      noFill()
+      noStroke()
+      fill(255, 100, 150, 150)
+      let radX = tileOffsetC / 3
+      let radY = tileOffsetR / 3
+      ellipse(x , y , radX * 2, radY * 2) //Elipse centre x y
+      text(trackGrid[gy][gx].activeJunction ,x , y)
+    }
+    
+    if (trackGrid[gy][gy].occupied == false) {
+      stroke(0)
+      noFill()
+      noStroke()
+      fill(100, 255, 150, 150)
+      let radX = tileOffsetC / 3
+      let radY = tileOffsetR / 3
+      ellipse(x , y , radX * 2, radY * 2) //Elipse centre x y
+      text(trackGrid[gy][gx].activeJunction ,x , y)
+    }
   }
 }
 
@@ -301,6 +330,12 @@ function debug() {
   console.log(trackGrid[tileY][tileX].track.length)
 }
 
+function changeJunction() {
+  if (trackGrid[tileY][tileX].trackType == 3) {
+    trackGrid[tileY][tileX].activeJunction = (trackGrid[tileY][tileX].activeJunction + 1) % 2
+  }
+}
+
 
 
 //USER INPUT FUNCTIONS
@@ -363,6 +398,7 @@ function mouseMoved() {
 function mouseClicked() {
   if (gameMode == 1) { //For controlling junctions
     debug()
+    changeJunction()
   }
 
   if (gameMode == 3) {
