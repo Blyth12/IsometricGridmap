@@ -62,6 +62,7 @@ function preload() {
     loadImage("img/train/train1hz.png"),
   ]
 
+  beginGame()
 }
 
 function setup() {
@@ -72,10 +73,9 @@ function setup() {
   let totalHeight = (Xtiles + Ytiles - 1) * tileOffsetR
 
   originX = (width - totalWidth) / 2
-  originY = height / 2 - (height * 0.05)
+  originY = height / 2 - (height * 0.05) - 70
 
   console.log(totalWidth, totalHeight, width, height, originX, originY)
-  beginGame()
 }
 
 
@@ -122,38 +122,60 @@ function draw() {
 }
 
 
-//Draw UI elements + zoom
+//Draw UI elements + zoom.
 function drawUI() {
-  textSize(64)
+  textSize(50)
   fill(255)
   noStroke()
   textFont()
   text(tileX + " " + tileY, 20, 50)
   text(floor(mouseX) + " " + floor(mouseY), 20, 150) //Debug text
   text(gameMode + " " + rotation , 20, 250)
-  text(elapsedTime , 20, 350)
 
-  text("€" + playerMoney, 0.88 * windowWidth, 0.1 * windowHeight)
-
-  fill(0)
-  rect(20, windowHeight * 0.8, 210, 55, 20)
+  fill (0)
+  rect(0, windowHeight * 0.89, windowWidth , windowHeight * 0.01 , 0)
+  fill(38, 77, 115)
+  rect(0, windowHeight * 0.9, windowWidth , windowHeight * 0.1 , 0)
   fill(255)
-  text("Build", 50, windowHeight * 0.8 + 50)
 
-  fill(0)
-  rect(20, windowHeight * 0.9, 210, 55, 20)
+  stroke(0)
+  fill(51, 51, 51)
+  rect(windowWidth * 0.87 , windowHeight * 0.92, windowWidth * 0.1 , windowHeight * 0.06 , 20)
   fill(255)
-  text("Delete", 35, windowHeight * 0.9 + 50)
+  text("€" + playerMoney, 0.875 * windowWidth, 0.97 * windowHeight)
 
-  fill(0)
-  rect(windowWidth * 0.95, windowHeight * 0.8, 50, 55, 20)
+  stroke(0)
+  fill(51, 51, 51)
+  rect(windowWidth * 0.8 , windowHeight * 0.92, windowWidth * 0.05 , windowHeight * 0.06 , 20)
   fill(255)
-  text("+", windowWidth * 0.95 + 5, windowHeight * 0.8 + 50)
+  text(elapsedTime , 0.818 * windowWidth, 0.97 * windowHeight)
 
-  fill(0)
-  rect(windowWidth * 0.95, windowHeight * 0.9, 50, 55, 20)
+  stroke(0)
+  fill(51, 51, 51)
+  rect(windowWidth * 0.03 , windowHeight * 0.92, windowWidth * 0.15 , windowHeight * 0.06 , 20)
   fill(255)
-  text("-", windowWidth * 0.95 + 15, windowHeight * 0.9 + 50)
+  text("MANAGE", windowWidth * 0.05 , windowHeight * 0.92 + windowHeight * 0.05)
+
+  fill(51, 51, 51)
+  rect(windowWidth * 0.20 , windowHeight * 0.92, windowWidth * 0.15 , windowHeight * 0.06, 20)
+  fill(255)
+  text("BUILD", windowWidth * 0.235 , windowHeight * 0.92 + windowHeight * 0.05)
+
+  fill(51, 51, 51)
+  rect(windowWidth * 0.37 , windowHeight * 0.92, windowWidth * 0.15 , windowHeight * 0.06, 20)
+  fill(255)
+  text("DELETE", windowWidth * 0.395 , windowHeight * 0.92 + windowHeight * 0.05)
+  noStroke()
+
+  // fill(0)
+  // rect(windowWidth * 0.95, windowHeight * 0.8, 50, 55, 20)
+  // fill(255)
+  // text("+", windowWidth * 0.95 + 5, windowHeight * 0.8 + 50)
+
+  // fill(0)
+  // rect(windowWidth * 0.95, windowHeight * 0.9, 50, 55, 20)
+  // fill(255)
+  // text("-", windowWidth * 0.95 + 15, windowHeight * 0.9 + 50)
 }
 
 function zoomIn() {
@@ -223,7 +245,7 @@ function calculateOffset(a, b, c, d, gx, gy, trackOffX1, trackOffY1) { //Used to
 function drawAtCoordinates(gx, gy, midX, midY, currentTrack) { // Function used to draw tracks with correct rotation from switch statment
 
   // if (trackState[gy][gx] != 0) {
-    image(tracks[currentTrack], midX + tileOffsetC / 2, midY + tileOffsetR)
+  image(tracks[currentTrack], midX + tileOffsetC / 2, midY + tileOffsetR)
   // }
 }
 
@@ -360,9 +382,11 @@ function keyPressed() {
     changeMode(3)
   }
   if (key === "e" && gameMode == 2){
+    console.log("Rotate e")
     rotateTrack(0)
   }
   if (key === "q" && gameMode == 2){
+    console.log("Rotate q")
     rotateTrack(1)
   }
   if (key === "q" && gameMode == 1){
@@ -399,27 +423,42 @@ function mouseMoved() {
 
 //Varying functions for when mouse is clicked depending on the selected mode
 function mouseClicked() {
-  if (gameMode == 1) { //For controlling junctions
-    debug()
-    changeJunction()
+
+  if(mouseY < windowHeight * 0.9) {
+    if (gameMode == 1) { //For controlling junctions
+      debug()
+      changeJunction()
+    }
+
+    if (gameMode == 3 && playerMoney >= 50) {
+      deleteTrack()
+    }
+
+    if (gameMode == 2 && playerMoney >= 100) {
+      buildTrack()
+    }
   }
 
-  if (gameMode == 3 && playerMoney >= 50) {
-    deleteTrack()
+  if ((mouseX >= windowWidth * 0.03 && mouseX <= windowWidth * 0.03 + windowWidth * 0.15) && (mouseY >= windowHeight * 0.92 && mouseY <= windowHeight * 0.92 + windowHeight * 0.06)) {  // writeup - code for button press detection
+    changeMode(1)
   }
 
-  if (gameMode == 2 && playerMoney >= 100) {
-    buildTrack()
-  }
-
-  if (mouseX >= 20 && mouseX <= 20 + 210 && mouseY >= windowHeight * 0.8 && mouseY <= windowHeight * 0.8 + 55) {  // writeup - code for button press detection
+  if ((mouseX >= windowWidth * 0.20 && mouseX <= windowWidth * 0.20 + windowWidth * 0.15) && (mouseY >= windowHeight * 0.92 && mouseY <= windowHeight * 0.92 + windowHeight * 0.06)) {  // writeup - code for button press detection
     changeMode(2)
   }
 
-  if (mouseX >= 20 && mouseX <= 20 + 210 && mouseY >= windowHeight * 0.9 && mouseY <= windowHeight * 0.9 + 55) {  // writeup - code for button press detection
+  if ((mouseX >= windowWidth * 0.37 && mouseX <= windowWidth * 0.37 + windowWidth * 0.15) && (mouseY >= windowHeight * 0.92 && mouseY <= windowHeight * 0.92 + windowHeight * 0.06)) {  // writeup - code for button press detection
     changeMode(3)
   }
 }
+
+
+// rect(windowWidth * 0.03 , windowHeight * 0.92, windowWidth * 0.15 , windowHeight * 0.06 , 20)
+
+// rect(windowWidth * 0.20 , windowHeight * 0.92, windowWidth * 0.15 , windowHeight * 0.06, 20)
+
+// rect(windowWidth * 0.37 , windowHeight * 0.92, windowWidth * 0.15 , windowHeight * 0.06, 20)
+
 
 function rotateTrack(a) {
   if (a == 0) {

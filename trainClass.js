@@ -29,12 +29,14 @@ const DIRECTIONS_CHECK = { // Every directions values. This means that north cou
 let activeTrains = []
 
 class Train {
-    constructor(x, y, dir) {
+    constructor(x, y, dir, origin, destination) {
         this.x = x
         this.y = y
         this.direction = dir // 0-NW , 1-N , 2-NE , 3-E , 4-SE , 5-S , 6-SW , 7-W
         this.activeBitmask = 0
         this.activeTrackType = 0
+        this.origin = origin
+        this.destination = destination
     }
 
     decideNextDirection() {
@@ -167,32 +169,36 @@ class Train {
 
                     // case 1 || 5 || 6 || 4 || 0 || 2:
                         console.log("Direction: " + this.direction)
-                        if ((junctionType & TRACKJUNCTION.NS[0]) == TRACKJUNCTION.NS[0]) {
+                        if ((junctionType & TRACKJUNCTION.NS[0]) == TRACKJUNCTION.NS[0]) { // 
                             console.log("NS0 "+TRACKJUNCTION.NS[0])
                             if (this.direction == 1) { this.direction = this.direction += junctionToggle }
                             if (this.direction == 5) { if (junctionToggle == 1) {this.direction = 1} } // Turn around if junction is blocking
-                            if (this.direction == 6) { this.direction = 5 }
+                            if (this.direction == 6 && junctionToggle == 1) { this.direction = 5 }
+                            if (this.direction == 6 && junctionToggle == 0) { this.direction = 2 }
                             return this.direction
                         }
                         if ((junctionType & TRACKJUNCTION.NS[1]) == TRACKJUNCTION.NS[1]) {
                             console.log("NS1 "+TRACKJUNCTION.NS[1])
                             if (this.direction == 1) { this.direction = this.direction += junctionToggle }
                             if (this.direction == 5) { if (junctionToggle == 1) {this.direction = 1} } // Turn around if junction is blocking
-                            if (this.direction == 4) { this.direction = 5 }
+                            if (this.direction == 4 && junctionToggle == 1) { this.direction = 5 }
+                            if (this.direction == 4 && junctionToggle == 0) { this.direction = 0 }
                             return this.direction
                         }
-                        if ((junctionType & TRACKJUNCTION.NS[2]) == TRACKJUNCTION.NS[2]) {
+                        if ((junctionType & TRACKJUNCTION.NS[2]) == TRACKJUNCTION.NS[2]) { // WORKS
                             console.log("NS2 "+TRACKJUNCTION.NS[2])
                             if (this.direction == 5) { this.direction = this.direction -= junctionToggle }
                             if (this.direction == 1) { if (junctionToggle == 1) {this.direction = 5} } // Turn around if junction is blocking
-                            if (this.direction == 0) { this.direction = 1 }
+                            if (this.direction == 0 && junctionToggle == 1) { this.direction = 1 }
+                            if (this.direction == 0 && junctionToggle == 0) { this.direction = 4 }
                             return this.direction
                         }
-                        if ((junctionType & TRACKJUNCTION.NS[3]) == TRACKJUNCTION.NS[3]) {
+                        if ((junctionType & TRACKJUNCTION.NS[3]) == TRACKJUNCTION.NS[3]) { // WORKS
                             console.log("NS3 "+TRACKJUNCTION.NS[3])
                             if (this.direction == 5) { this.direction = this.direction += junctionToggle }
                             if (this.direction == 1) { if (junctionToggle == 1) {this.direction = 5} } // Turn around if junction is blocking
-                            if (this.direction == 2) { this.direction = 1 }
+                            if (this.direction == 2 && junctionToggle == 1) { this.direction = 1 }
+                            if (this.direction == 2 && junctionToggle == 0) { this.direction = 6 }
                             return this.direction
                         }
 
@@ -303,9 +309,19 @@ class Train {
     }
 }
 
+function decideDestination(origin) {
+    let nextDestination = Math.random() * stationCount
+    if (nextDestination == origin){
+        decideDestination()
+    }
+    return nextDestination
+}
+
 
 function spawnTrain(x, y, dir) {
-    activeTrains.push(new Train(x, y, dir))
+    decideDestination(1)
+    console.log(nextDestination + "DEST")
+    activeTrains.push(new Train(x, y, dir, origin, nextDestination))
 }
 
 function removeTrain() {

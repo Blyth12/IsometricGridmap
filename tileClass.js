@@ -275,7 +275,6 @@ function spawnTrack(Y , X , R) {
   if(!trackGrid[Y][X].hasTrackThere(R)) {
     trackGrid[Y][X].addTrack(R)
     calculateBitmask(Y, X, 1)
-    playerMoney -= 100
   }
 }
   
