@@ -25,7 +25,7 @@ let rotation = 1 // 1: NS, 2: EW, 3: SE, 4: NW
 let newMode
 let playerMoney = 10000
 
-
+let colours = ["red", "orange", "green", "blue", "violet"]
 
 // PRE LOAD FUNCTIONS
 function preload() {
@@ -52,14 +52,19 @@ function preload() {
   ]
 
   stations = [
-    loadImage("img/station/blue.png"),
-    loadImage("img/station/red.png"),
-    loadImage("img/station/green.png"),
-    loadImage("img/station/purple.png"),
+    loadImage("img/station/white.png"),
+    // loadImage("img/station/blue.png"),
+    // loadImage("img/station/red.png"),
+    // loadImage("img/station/green.png"),
+    // loadImage("img/station/purple.png"),
   ]
 
   trains = [
-    loadImage("img/train/train1hz.png"),
+    loadImage("img/train/train.png"),
+  ]
+
+  junctionArrow = [
+    loadImage("img/arrow.png")
   ]
 
   beginGame()
@@ -106,6 +111,7 @@ function draw() {
   for (let gx = Xtiles - 1; gx >= 0; gx--) {
     for (let gy = 0; gy < Ytiles; gy++) {
       junctionSwitch(gx, gy)
+      drawJunctionArrow(gx, gy)
     }
   }
 
@@ -216,7 +222,42 @@ function drawTrains(gx, gy) {
 
   for (let i = 0; i < activeTrains.length; i++) {
     if (gx == activeTrains[i].x && gy == activeTrains[i].y) {
-      image(trains[0], offX + tileOffsetC / 2, offY + tileOffsetR)
+      push()
+      let centerX = offX + tileOffsetC / 2 + 50
+      let centerY = offY + tileOffsetR + 32.5
+      translate(centerX , centerY) // Sets origin to the tile the train is on to rotate properly
+      angleMode(DEGREES)
+      // imageMode(CENTER)
+      switch(activeTrains[i].direction) {
+        case 0:
+          rotate(0, offX, offY)
+          break
+        case 1:
+          rotate(0, offX, offY)
+          break
+        case 2:
+          rotate(90, offX, offY)
+          break
+        case 3:
+          rotate(135, offX, offY)
+          break
+        case 4:
+          rotate(180, offX, offY)
+          break
+        case 5:
+          rotate(225, offX, offY)
+          break
+        case 6:
+          rotate(270, offX, offY)
+          break
+        case 7:
+          rotate(315, offX, offY)
+          break
+      }
+
+      tint(colours[activeTrains[i].destination])
+      image(trains[0], 0, 0)
+      pop() // Push pop stops other things being affected by rotate.
     }
   }
 }
@@ -227,7 +268,8 @@ function drawBuildings(gx, gy) {
   buildOffY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
 
   if (buildingGrid[gy][gx] instanceof Station) {
-    image(stations[buildingGrid[gy][gx].colour], buildOffX + tileOffsetC / 2, buildOffY + tileOffsetR - 50)
+    tint(colours[buildingGrid[gy][gx].colour])
+    image(stations[0], buildOffX + tileOffsetC / 2, buildOffY + tileOffsetR - 50)
   }
 }
 
@@ -243,10 +285,7 @@ function calculateOffset(a, b, c, d, gx, gy, trackOffX1, trackOffY1) { //Used to
 }
 
 function drawAtCoordinates(gx, gy, midX, midY, currentTrack) { // Function used to draw tracks with correct rotation from switch statment
-
-  // if (trackState[gy][gx] != 0) {
   image(tracks[currentTrack], midX + tileOffsetC / 2, midY + tileOffsetR)
-  // }
 }
 
 function placementPreview(gx, gy, midX, midY) { // Function used to preview track placment with correct rotation from switch statment
@@ -254,6 +293,99 @@ function placementPreview(gx, gy, midX, midY) { // Function used to preview trac
   if (gameMode == 2 && gx == tileX && gy == tileY) {
     tint(200, 200, 0, 255)
     image(tracks[rotation], midX + tileOffsetC / 2, midY + tileOffsetR)
+  }
+}
+
+function drawJunctionArrow(gx, gy) {
+  if (trackGrid[gy][gx].trackType == 3){
+    let x = gx * tileOffsetC / 2 + (gy + 1) * tileOffsetC / 2 + originX + 50
+    let y = (gy + 1) * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY + 42.5
+    let junctionArrowType = trackGrid[gy][gx].trackBitmask
+    push()
+    imageMode(CENTER)
+    translate(x , y)
+    if (junctionArrowType & TRACKJUNCTION.NWSE[0] == TRACKJUNCTION.NWSE[0]) {
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
+      else {rotate(45)}
+    }
+
+    if (junctionArrowType & TRACKJUNCTION.NWSE[1] == TRACKJUNCTION.NWSE[1]) {
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
+      else {rotate(45)}
+    }
+
+    if (junctionArrowType & TRACKJUNCTION.NWSE[2] == TRACKJUNCTION.NWSE[2]) {
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
+      else {rotate(45)}
+    }
+
+    if (junctionArrowType & TRACKJUNCTION.NWSE[3] == TRACKJUNCTION.NWSE[3]) {
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
+      else {rotate(45)}
+    }
+
+    if (junctionArrowType & TRACKJUNCTION.NS[0] == TRACKJUNCTION.NS[0]) {
+      console.log("HIIII")
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(270)}
+      else {rotate(45)}
+    }
+
+    if (junctionArrowType & TRACKJUNCTION.NS[1] == TRACKJUNCTION.NS[1]) {
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
+      else {rotate(45)}
+    }
+
+    if (junctionArrowType & TRACKJUNCTION.NS[2] == TRACKJUNCTION.NS[2]) {
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
+      else {rotate(45)}
+    }
+
+    if (junctionArrowType & TRACKJUNCTION.NS[3] == TRACKJUNCTION.NS[3]) {
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
+      else {rotate(45)}
+    }
+
+    if (junctionArrowType & TRACKJUNCTION.SWNE[0] == TRACKJUNCTION.SWNE[0]) {
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
+      else {rotate(45)}
+    }
+
+    if (junctionArrowType & TRACKJUNCTION.SWNE[1] == TRACKJUNCTION.SWNE[1]) {
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
+      else {rotate(45)}
+    }
+
+    if (junctionArrowType & TRACKJUNCTION.SWNE[2] == TRACKJUNCTION.SWNE[2]) {
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
+      else {rotate(45)}
+    }
+
+    if (junctionArrowType & TRACKJUNCTION.SWNE[3] == TRACKJUNCTION.SWNE[3]) {
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
+      else {rotate(45)}
+    }
+
+    if (junctionArrowType & TRACKJUNCTION.EW[0] == TRACKJUNCTION.EW[0]) {
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
+      else {rotate(45)}
+    }
+
+    if (junctionArrowType & TRACKJUNCTION.EW[1] == TRACKJUNCTION.EW[1]) {
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
+      else {rotate(45)}
+    }
+
+    if (junctionArrowType & TRACKJUNCTION.EW[2] == TRACKJUNCTION.EW[2]) {
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
+      else {rotate(45)}
+    }
+
+    if (junctionArrowType & TRACKJUNCTION.EW[3] == TRACKJUNCTION.EW[3]) {
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
+      else {rotate(45)}
+    }
+    image(junctionArrow[0], -7, 0)
+    pop()
   }
 }
 
@@ -453,13 +585,6 @@ function mouseClicked() {
 }
 
 
-// rect(windowWidth * 0.03 , windowHeight * 0.92, windowWidth * 0.15 , windowHeight * 0.06 , 20)
-
-// rect(windowWidth * 0.20 , windowHeight * 0.92, windowWidth * 0.15 , windowHeight * 0.06, 20)
-
-// rect(windowWidth * 0.37 , windowHeight * 0.92, windowWidth * 0.15 , windowHeight * 0.06, 20)
-
-
 function rotateTrack(a) {
   if (a == 0) {
     if (rotation < 4){
@@ -494,9 +619,19 @@ function tick() {
   elapsedTime += 1
 }
 
+function monitorGame() {
+  if (playerMoney <= 0) {
+    console.log("LOOSER")
+    window.location.href = 'index.html'
+  }
+}
+
 function beginGame() {
+  createRandomStation()
+  createRandomStation()
+  setInterval(monitorGame, 100)
   setInterval(tick, 1000)
-  setInterval(createRandomStation, 10000)
+  setInterval(createRandomStation, 100000)
   setInterval(moveTrains, 1000)
 }
 

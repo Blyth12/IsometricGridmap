@@ -1,6 +1,6 @@
 function setup() {
-    createCanvas(windowWidth, windowHeight)
-    bg = loadImage("img/logo.jpeg")
+  createCanvas(windowWidth, windowHeight)
+  bg = loadImage("img/logo.jpeg")
 }
   
 function draw() {
@@ -20,12 +20,12 @@ function draw() {
   fill(51, 51, 51)
   rect(windowWidth * 0.35 , windowHeight * 0.92, windowWidth * 0.3 , windowHeight * 0.06, 20)
   fill(255)
-  text("SETTINGS", windowWidth * 0.48 , windowHeight * 0.92 + windowHeight * 0.035)
+  text("HELP", windowWidth * 0.493 , windowHeight * 0.92 + windowHeight * 0.035)
 
   fill(51, 51, 51)
   rect(windowWidth * 0.67 , windowHeight * 0.92, windowWidth * 0.3 , windowHeight * 0.06, 20)
   fill(255)
-  text("HELP", windowWidth * 0.82 , windowHeight * 0.92 + windowHeight * 0.035)
+  text("EXIT", windowWidth * 0.82 , windowHeight * 0.92 + windowHeight * 0.035)
 }
 
 function mouseClicked() {
@@ -36,10 +36,12 @@ function mouseClicked() {
 
   if (mouseX >= (windowWidth * 0.35) && mouseX <= (windowWidth * 0.35 + windowWidth * 0.3) && mouseY >= (windowHeight * 0.92) && mouseY <= (windowHeight * 0.92 + windowHeight * 0.06)) {  // writeup - code for button press detection
     console.log("Help")
+    window.location.href = 'help.html'
   }
 
   if (mouseX >= (windowWidth * 0.67) && mouseX <= (windowWidth * 0.67 + windowWidth * 0.3) && mouseY >= (windowHeight * 0.92) && mouseY <= (windowHeight * 0.92 + windowHeight * 0.06)) {  // writeup - code for button press detection
     console.log("Settings")
+    window.location.href = 'exit.html'
   }
 }
   

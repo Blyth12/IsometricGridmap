@@ -8,6 +8,7 @@ class Station {
         this.y = y
         this.timer = 0
         this.colour = colour
+        this.stationID = colour
     }
 
     createStation() {
@@ -24,13 +25,13 @@ class Station {
     }
 
     spawnTrain() {
-        spawnTrain(this.y , this.x , this.rotation)
+        spawnTrain(this.y , this.x , this.rotation, this.stationID)
     }
 
 }
 
 function createRandomStation() {
-    if (stationCount <= 3) {
+    if (stationCount <= 4) {
         let face = Math.floor(Math.random() * 4)
         let coordinate
         switch (face) {

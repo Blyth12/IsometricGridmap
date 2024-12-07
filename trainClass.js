@@ -1,3 +1,4 @@
+let nextDestination
 // 1--------2--------4
 // |                 |
 // |                 |
@@ -29,7 +30,8 @@ const DIRECTIONS_CHECK = { // Every directions values. This means that north cou
 let activeTrains = []
 
 class Train {
-    constructor(x, y, dir, origin, destination) {
+    constructor(x, y, dir, origin, destination, ID) {
+        this.trainID = ID
         this.x = x
         this.y = y
         this.direction = dir // 0-NW , 1-N , 2-NE , 3-E , 4-SE , 5-S , 6-SW , 7-W
@@ -168,7 +170,7 @@ class Train {
                         }
 
                     // case 1 || 5 || 6 || 4 || 0 || 2:
-                        console.log("Direction: " + this.direction)
+                        console.log("Direction: " + this.direction) 
                         if ((junctionType & TRACKJUNCTION.NS[0]) == TRACKJUNCTION.NS[0]) { // 
                             console.log("NS0 "+TRACKJUNCTION.NS[0])
                             if (this.direction == 1) { this.direction = this.direction += junctionToggle }
@@ -271,9 +273,6 @@ class Train {
     move() {
         this.activeBitmask = trackGrid[this.y][this.x].trackBitmask
         let nextDirection = this.decideNextDirection()
-        // console.log("bitmask " + this.activeBitmask)
-        // console.log("direction " + checkDirection(this.activeBitmask , this.direction))
-        // switch (checkDirection(this.activeBitmask , this.direction)) {
         switch (nextDirection) {
             case -1:
                 break
@@ -306,26 +305,50 @@ class Train {
                 if(this.x != 0) {this.x -= 1}
                 break
         }
+        this.checkStationArrival()
+    }
+
+    checkStationArrival() {
+        console.log(buildingGrid[this.y][this.x])
+        if (buildingGrid[this.y][this.x] instanceof Station) {
+            console.log("Station detect")
+            console.log("Origin:"+this.origin + " Dest:"+this.destination)
+            if (this.origin == buildingGrid[this.y][this.x].stationID) {
+                console.log("Origin station")
+            }
+            if (this.destination == buildingGrid[this.y][this.x].stationID) {
+                console.log("Dest reached")
+                playerMoney += 1000 
+                this.removeTrain()
+            }
+            else {
+                console.log("Wrong station")
+                // playerMoney -= 1000
+            }
+        }
+    }
+
+    removeTrain() {
+        activeTrains.remove([this.trainID])
     }
 }
 
+
+
 function decideDestination(origin) {
-    let nextDestination = Math.random() * stationCount
-    if (nextDestination == origin){
-        decideDestination()
-    }
+    nextDestination = Math.floor(Math.random() * stationCount)
     return nextDestination
 }
 
 
-function spawnTrain(x, y, dir) {
-    decideDestination(1)
+function spawnTrain(x, y, dir, origin) {
+    decideDestination(origin)
+    if (nextDestination == origin){
+        nextDestination += 1
+    }
     console.log(nextDestination + "DEST")
-    activeTrains.push(new Train(x, y, dir, origin, nextDestination))
-}
-
-function removeTrain() {
-
+    let ID = activeTrains.length + 1
+    activeTrains.push(new Train(x, y, dir, origin, nextDestination, ID))
 }
 
 function moveTrains() {
@@ -333,14 +356,3 @@ function moveTrains() {
         activeTrains[i].move()
       }
 }
-
-// function checkDirection(activeBitmask, direction) { // Used to check if there is a path in the direction the train is travelling
-//     let checkMask = DIRECTIONS_CHECK[direction] // Get the bitmask values for the trains direction
-//     console.log("bitwise" + (activeBitmask & checkMask))
-//     return (activeBitmask & checkMask) // This performs the bitwise AND operation, where the two numbers binary values are compared to see if the current tile has any tracks in the direction of the trains direction
-// }
-
-
-
-//check direction
-// check 
