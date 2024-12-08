@@ -1,6 +1,6 @@
 function setup() {
     createCanvas(windowWidth, windowHeight)
-    background('navy');
+    background(38, 77, 115);
 }
 
 function draw() {
@@ -9,10 +9,11 @@ function draw() {
     fill(0)
     text("HELP", windowWidth * 0.49, windowHeight * 0.1 + windowHeight * 0.035)
 
-    fill(200)
+    fill(51, 51, 51)
     rect(windowWidth * 0.2, windowHeight * 0.3, windowWidth * 0.6, windowHeight * 0.45, 10)
-    fill(0)
+    fill(255)
     text("=== HOW TO PLAY ===", windowWidth * 0.461, windowHeight * 0.3 + windowHeight * 0.035)
+    text("you will start the game with two stations, where you will have a grace period to construct", windowWidth * 0.461, windowHeight * 0.3 + (windowHeight * 0.035 * 2))
 
     fill(0)
     rect(0, windowHeight * 0.89, windowWidth, windowHeight * 0.01, 0)

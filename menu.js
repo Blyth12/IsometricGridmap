@@ -65,10 +65,14 @@ function mouseClicked() {
   if (levelSelect == true) {
     if (mouseX >= (windowWidth * 0.25) && mouseX <= (windowWidth * 0.25 + windowWidth * 0.2) && mouseY >= (windowHeight * 0.425) && mouseY <= (windowHeight * 0.425 + windowHeight * 0.2)) {  // writeup - code for button press detection
       difficulty = 0
+      localStorage.setItem("difficulty", difficulty)
+      // console.log(localStorage.getItem("difficulty"))
       window.location.href = 'game.html' // Redirect to game.html
     }
     if (mouseX >= (windowWidth * 0.55) && mouseX <= (windowWidth * 0.55 + windowWidth * 0.2) && mouseY >= (windowHeight * 0.425) && mouseY <= (windowHeight * 0.425 + windowHeight * 0.2)) {  // writeup - code for button press detection
       difficulty = 1
+      localStorage.setItem("difficulty", difficulty)
+      // console.log(localStorage.getItem("difficulty"))
       window.location.href = 'game.html' // Redirect to game.html
     }
   }

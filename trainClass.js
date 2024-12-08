@@ -309,20 +309,20 @@ class Train {
     }
 
     checkStationArrival() {
-        console.log(buildingGrid[this.y][this.x])
+        // console.log(buildingGrid[this.y][this.x])
         if (buildingGrid[this.y][this.x] instanceof Station) {
-            console.log("Station detect")
-            console.log("Origin:"+this.origin + " Dest:"+this.destination)
+            // console.log("Station detect")
+            // console.log("Origin:"+this.origin + " Dest:"+this.destination)
             if (this.origin == buildingGrid[this.y][this.x].stationID) {
-                console.log("Origin station")
+                // console.log("Origin station")
             }
             if (this.destination == buildingGrid[this.y][this.x].stationID) {
-                console.log("Dest reached")
+                // console.log("Dest reached")
                 playerMoney += 1000 
                 this.removeTrain()
             }
             else {
-                console.log("Wrong station")
+                // console.log("Wrong station")
                 // playerMoney -= 1000
             }
         }

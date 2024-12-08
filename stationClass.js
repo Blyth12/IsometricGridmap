@@ -19,7 +19,7 @@ class Station {
         let min = 5
         let max = 10
         let randomTime = Math.floor(Math.random() * (max - min + 1) + min)
-        console.log("RANDOMTIME " + randomTime)
+        // console.log("RANDOMTIME " + randomTime)
         setInterval(this.spawnTrain() , randomTime * 1000)
         
     }

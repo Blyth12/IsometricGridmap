@@ -29,7 +29,7 @@ let colours = ["red", "orange", "green", "blue", "violet"]
 
 // PRE LOAD FUNCTIONS
 function preload() {
-
+  setMap()
   createTrackGrid() // Create array for track placement
   createBuildingGrid() // Create array for building placement
   setTrackValues()
@@ -261,35 +261,35 @@ function drawTrains(gx, gy) {
   for (let i = 0; i < activeTrains.length; i++) {
     if (gx == activeTrains[i].x && gy == activeTrains[i].y) {
       push()
-      let centerX = offX + tileOffsetC / 2 + 50
-      let centerY = offY + tileOffsetR + 32.5
+      let centerX = (offX + tileOffsetC / 2) - 10
+      let centerY = offY + tileOffsetR
       translate(centerX , centerY) // Sets origin to the tile the train is on to rotate properly
       angleMode(DEGREES)
-      // imageMode(CENTER)
+      imageMode(CENTER)
       switch(activeTrains[i].direction) {
         case 0:
-          rotate(0, offX, offY)
-          break
-        case 1:
-          rotate(0, offX, offY)
-          break
-        case 2:
-          rotate(90, offX, offY)
-          break
-        case 3:
-          rotate(135, offX, offY)
-          break
-        case 4:
-          rotate(180, offX, offY)
-          break
-        case 5:
-          rotate(225, offX, offY)
-          break
-        case 6:
           rotate(270, offX, offY)
           break
+        case 1:
+          rotate(305, offX, offY)
+          break
+        case 2:
+          rotate(0, offX, offY)
+          break
+        case 3:
+          rotate(60, offX, offY)
+          break
+        case 4:
+          rotate(90, offX, offY)
+          break
+        case 5:
+          rotate(105, offX, offY)
+          break
+        case 6:
+          rotate(180, offX, offY)
+          break
         case 7:
-          rotate(315, offX, offY)
+          rotate(240, offX, offY)
           break
       }
 
@@ -338,93 +338,109 @@ function placementPreview(gx, gy, midX, midY) { // Function used to preview trac
 
 function drawJunctionArrow(gx, gy) {
   if (trackGrid[gy][gx].trackType == 3){
-    let x = gx * tileOffsetC / 2 + (gy + 1) * tileOffsetC / 2 + originX + 50
-    let y = (gy + 1) * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY + 42.5
+    let x = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX + 50
+    let y = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY + 42.5
     let junctionArrowType = trackGrid[gy][gx].trackBitmask
     push()
-    imageMode(CENTER)
     translate(x , y)
-    if (junctionArrowType & TRACKJUNCTION.NWSE[0] == TRACKJUNCTION.NWSE[0]) {
-      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
-      else {rotate(45)}
-    }
-
-    if (junctionArrowType & TRACKJUNCTION.NWSE[1] == TRACKJUNCTION.NWSE[1]) {
-      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
-      else {rotate(45)}
-    }
-
-    if (junctionArrowType & TRACKJUNCTION.NWSE[2] == TRACKJUNCTION.NWSE[2]) {
-      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
-      else {rotate(45)}
-    }
-
-    if (junctionArrowType & TRACKJUNCTION.NWSE[3] == TRACKJUNCTION.NWSE[3]) {
-      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
-      else {rotate(45)}
-    }
-
-    if (junctionArrowType & TRACKJUNCTION.NS[0] == TRACKJUNCTION.NS[0]) {
-      console.log("HIIII")
+    imageMode(CENTER)
+    // console.log(junctionArrowType)
+    if ((junctionArrowType & TRACKJUNCTION.NWSE[0]) == TRACKJUNCTION.NWSE[0]) {
+      console.log("j1")
       if (trackGrid[gy][gx].activeJunction == 1) {rotate(270)}
+      else {rotate(315)}
+    }
+
+    if ((junctionArrowType & TRACKJUNCTION.NWSE[1]) == TRACKJUNCTION.NWSE[1]) {
+      console.log("j2")
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(270)}
+      else {rotate(225)}
+    }
+
+    if ((junctionArrowType & TRACKJUNCTION.NWSE[2]) == TRACKJUNCTION.NWSE[2]) {
+      console.log("j3")
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(90)}
+      else {rotate(135)}
+    }
+
+    if ((junctionArrowType & TRACKJUNCTION.NWSE[3]) == TRACKJUNCTION.NWSE[3]) {
+      console.log("j4")
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(90)}
       else {rotate(45)}
     }
 
-    if (junctionArrowType & TRACKJUNCTION.NS[1] == TRACKJUNCTION.NS[1]) {
+    if ((junctionArrowType & TRACKJUNCTION.NS[0]) == TRACKJUNCTION.NS[0]) {
+      console.log("j5")
       if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
-      else {rotate(45)}
+      else {rotate(305)}
     }
 
-    if (junctionArrowType & TRACKJUNCTION.NS[2] == TRACKJUNCTION.NS[2]) {
-      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
-      else {rotate(45)}
+    if ((junctionArrowType & TRACKJUNCTION.NS[1]) == TRACKJUNCTION.NS[1]) {
+      console.log("j6")
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(270)}
+      else {rotate(305)}
     }
 
-    if (junctionArrowType & TRACKJUNCTION.NS[3] == TRACKJUNCTION.NS[3]) {
-      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
-      else {rotate(45)}
+    if ((junctionArrowType & TRACKJUNCTION.NS[2]) == TRACKJUNCTION.NS[2]) {
+      console.log("j7")
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(90)}
+      else {rotate(125)}
     }
 
-    if (junctionArrowType & TRACKJUNCTION.SWNE[0] == TRACKJUNCTION.SWNE[0]) {
-      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
-      else {rotate(45)}
+    if ((junctionArrowType & TRACKJUNCTION.NS[3]) == TRACKJUNCTION.NS[3]) {
+      console.log("j8")
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(180)}
+      else {rotate(125)}
     }
 
-    if (junctionArrowType & TRACKJUNCTION.SWNE[1] == TRACKJUNCTION.SWNE[1]) {
-      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
-      else {rotate(45)}
+    if ((junctionArrowType & TRACKJUNCTION.SWNE[0]) == TRACKJUNCTION.SWNE[0]) {
+      console.log("j9")
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(315)}
+      else {rotate(0)}
     }
 
-    if (junctionArrowType & TRACKJUNCTION.SWNE[2] == TRACKJUNCTION.SWNE[2]) {
-      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
-      else {rotate(45)}
+    if ((junctionArrowType & TRACKJUNCTION.SWNE[1]) == TRACKJUNCTION.SWNE[1]) {
+      console.log("j10")
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(45)}
+      else {rotate(0)}
     }
 
-    if (junctionArrowType & TRACKJUNCTION.SWNE[3] == TRACKJUNCTION.SWNE[3]) {
-      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
-      else {rotate(45)}
+    if ((junctionArrowType & TRACKJUNCTION.SWNE[2]) == TRACKJUNCTION.SWNE[2]) {
+      console.log("j11")
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(125)}
+      else {rotate(180)}
     }
 
-    if (junctionArrowType & TRACKJUNCTION.EW[0] == TRACKJUNCTION.EW[0]) {
-      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
-      else {rotate(45)}
+    if ((junctionArrowType & TRACKJUNCTION.SWNE[3]) == TRACKJUNCTION.SWNE[3]) {
+      console.log("j12")
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(235)}
+      else {rotate(180)}
     }
 
-    if (junctionArrowType & TRACKJUNCTION.EW[1] == TRACKJUNCTION.EW[1]) {
+    if ((junctionArrowType & TRACKJUNCTION.EW[0]) == TRACKJUNCTION.EW[0]) {
+      console.log("j13")
       if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
-      else {rotate(45)}
+      else {rotate(55)}
     }
 
-    if (junctionArrowType & TRACKJUNCTION.EW[2] == TRACKJUNCTION.EW[2]) {
-      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
-      else {rotate(45)}
+    if ((junctionArrowType & TRACKJUNCTION.EW[1]) == TRACKJUNCTION.EW[1]) {
+      console.log("j14")
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(90)}
+      else {rotate(55)}
     }
 
-    if (junctionArrowType & TRACKJUNCTION.EW[3] == TRACKJUNCTION.EW[3]) {
-      if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
-      else {rotate(45)}
+    if ((junctionArrowType & TRACKJUNCTION.EW[2]) == TRACKJUNCTION.EW[2]) {
+      console.log("j15")
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(270)}
+      else {rotate(235)}
     }
-    image(junctionArrow[0], -7, 0)
+
+    if ((junctionArrowType & TRACKJUNCTION.EW[3]) == TRACKJUNCTION.EW[3]) {
+      console.log("j16")
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(180)}
+      else {rotate(235)}
+    }
+    image(junctionArrow[0], 0, 0)
     pop()
   }
 }
@@ -441,7 +457,7 @@ function junctionSwitch(gx, gy) { //  Draw junction switch
       let radX = tileOffsetC / 3
       let radY = tileOffsetR / 3
       ellipse(x , y , radX * 2, radY * 2) //Elipse centre x y
-      text(trackGrid[gy][gx].activeJunction ,x , y)
+      // text(trackGrid[gy][gx].activeJunction ,x , y)
     }
     
     if (trackGrid[gy][gy].occupied == false) {
@@ -452,7 +468,7 @@ function junctionSwitch(gx, gy) { //  Draw junction switch
       let radX = tileOffsetC / 3
       let radY = tileOffsetR / 3
       ellipse(x , y , radX * 2, radY * 2) //Elipse centre x y
-      text(trackGrid[gy][gx].activeJunction ,x , y)
+      // text(trackGrid[gy][gx].activeJunction ,x , y)
     }
   }
 }
@@ -664,6 +680,64 @@ function monitorGame() {
   if (playerMoney <= 0) {
     console.log("LOOSER")
     window.location.href = 'index.html'
+  }
+}
+
+function setMap() {
+  let difficulty = localStorage.getItem("difficulty")
+  console.log(difficulty + "DIFFICULTY")
+  if (difficulty == null) {
+    difficulty = 0
+  }
+
+  if (difficulty == 0) {
+    mapState = [
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 2, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 2, 1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 2, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 2, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 2, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 1, 2, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 2, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 2, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    ]
+  }
+
+  if (difficulty == 1) {
+    mapState = [
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 2, 2, 1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 2, 2, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    ]
   }
 }
 
