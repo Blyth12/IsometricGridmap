@@ -33,11 +33,18 @@ function preload() {
   createTrackGrid() // Create array for track placement
   createBuildingGrid() // Create array for building placement
   setTrackValues()
+  createObstacles()
 
   tiles = [
     loadImage("img/grass.png"), //0
     loadImage("img/water.png"), //1
     loadImage("img/beach.png"), //2
+  ]
+
+  obstacles = [
+    loadImage("img/grass.png"), //X
+    loadImage("img/obstacle/obstacle1.png"),
+    loadImage("img/obstacle/obstacle2.png"),
   ]
 
   tracks = [
@@ -83,12 +90,36 @@ function setup() {
   console.log(totalWidth, totalHeight, width, height, originX, originY)
 }
 
+function createObstacles() {
+  for (let obstacleGx = 1; obstacleGx < Xtiles -2 ; obstacleGx++) {
+    for (let obstacleGy = 1; obstacleGy < Ytiles -2 ; obstacleGy++) {
+      let obstacleChance = Math.floor(Math.random() * 20)
+      if (obstacleChance == 1 && trackGrid[obstacleGy][obstacleGx].trackBitmask == 0 && !(buildingGrid[obstacleGy][obstacleGx] instanceof Station) && mapState[obstacleGy][obstacleGx] == 0) {
+        let obstacleNumber = Math.floor(Math.random() * 2) + 1
+        mapObstacles[obstacleGy][obstacleGx] = obstacleNumber
+      }
+    }
+  }
+}
 
+function deleteObstacle() {
+  console.log(mapObstacles[tileY][tileX])
+  switch (mapObstacles[tileY][tileX]){
+    case 1:
+        playerMoney -= 5000
+        mapObstacles[tileY][tileX] = 0
+        break
+    case 2:
+        playerMoney -= 1000
+        mapObstacles[tileY][tileX] = 0
+        break
+  }
+}
 
 //DRAW FUNCTIONS
 // Draw background and initialise drawing tracks and tiles in embedded for loops
 function draw() {
-  background('turquoise');
+  background('turquoise')
 
   push()
   translate(width / 2, height / 2)
@@ -119,6 +150,7 @@ function draw() {
     for (let gy = 0; gy < Ytiles; gy++) {
       drawTrains(gx, gy)
       drawBuildings(gx, gy)
+      drawObstacle(gx, gy)
     }
   }
 
@@ -196,7 +228,13 @@ function windowResized() {
   setup()
 }
 
-
+function drawObstacle(gx, gy) {
+  offX = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX // Calculates the offset by multiplying the coordinate by 60, 
+  offY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
+  if (mapObstacles[gy][gx] != 0) {
+    image(obstacles[mapObstacles[gy][gx]], offX + tileOffsetC / 2, offY + tileOffsetR - 50)
+  }
+}
 
 
 //Tile drawing + hovering
@@ -268,8 +306,10 @@ function drawBuildings(gx, gy) {
   buildOffY = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY
 
   if (buildingGrid[gy][gx] instanceof Station) {
+    push()
     tint(colours[buildingGrid[gy][gx].colour])
     image(stations[0], buildOffX + tileOffsetC / 2, buildOffY + tileOffsetR - 50)
+    pop()
   }
 }
 
@@ -564,6 +604,7 @@ function mouseClicked() {
 
     if (gameMode == 3 && playerMoney >= 50) {
       deleteTrack()
+      deleteObstacle()
     }
 
     if (gameMode == 2 && playerMoney >= 100) {

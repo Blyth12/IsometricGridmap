@@ -264,7 +264,7 @@ function calculateBitmask(tileY, tileX, multiplier) { // This will calculate the
 }
 
 function buildTrack() {
-  if((!trackGrid[tileY][tileX].hasTrackThere(rotation)) && (trackGrid[tileY][tileX].locked == false)) {
+  if((!trackGrid[tileY][tileX].hasTrackThere(rotation)) && (trackGrid[tileY][tileX].locked == false) && (mapState[tileY][tileX] == 0)) {
     trackGrid[tileY][tileX].addTrack(rotation)
     calculateBitmask(tileY, tileX, 1)
     playerMoney -= 100
@@ -279,8 +279,10 @@ function spawnTrack(Y , X , R) {
 }
   
 function deleteTrack() {
-      calculateBitmask(tileY, tileX, -1)
-      trackGrid[tileY][tileX].removeTrack()
-      playerMoney -= 50
+  if(trackGrid[tileY][tileX].trackBitmask != 0) {
+    calculateBitmask(tileY, tileX, -1)
+    trackGrid[tileY][tileX].removeTrack()
+    playerMoney -= 50
+  }
 }
 
