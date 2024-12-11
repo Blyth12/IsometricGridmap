@@ -178,12 +178,15 @@ class Tile {
 }
 
 function checkTrack(gx , gy) {
+  let trackFound = false
   for(let i = 0; i < allCombinations.length; i++){
     if (allCombinations[i] == trackGrid[gy][gx].trackBitmask) {
 
       for(let i = 0; i < emptyCombinations.length; i++) {
         if (emptyCombinations[i] == trackGrid[gy][gx].trackBitmask) {
           trackGrid[gy][gx].trackType = 0
+          trackFound = true
+          break
           // console.log("EMpty")
         }
       }
@@ -191,6 +194,8 @@ function checkTrack(gx , gy) {
       for(let i = 0; i < straightCombinations.length; i++) {
         if (straightCombinations[i] == trackGrid[gy][gx].trackBitmask) {
           trackGrid[gy][gx].trackType = 1
+          trackFound = true
+          break
           // console.log("Straight")
         }
       }
@@ -198,6 +203,8 @@ function checkTrack(gx , gy) {
       for(let i = 0; i < curveCombinations.length; i++) {
         if (curveCombinations[i] == trackGrid[gy][gx].trackBitmask) {
           trackGrid[gy][gx].trackType = 2
+          trackFound = true
+          break
           // console.log("Curve")
         }
       }
@@ -206,6 +213,8 @@ function checkTrack(gx , gy) {
         if (junctionCombinations[i] == trackGrid[gy][gx].trackBitmask) {
           trackGrid[gy][gx].trackType = 3
           trackGrid[gy][gx].locked = true
+          trackFound = true
+          break
           // console.log("Junction")
         }
       }
@@ -214,11 +223,17 @@ function checkTrack(gx , gy) {
         if (crossroadCombinations[i] == trackGrid[gy][gx].trackBitmask) {
           trackGrid[gy][gx].trackType = 4
           trackGrid[gy][gx].locked = true
+          trackFound = true
+          break
           // console.log("crossroad")
         }
       }
     }
   }
+  if (trackFound == false) {
+    trackGrid[gy][gx].trackType = 0
+  }
+  trackFound = false
 }
 
 function createTrackGrid() {
@@ -235,7 +250,7 @@ function createTrackGrid() {
 function calculateBitmask(tileY, tileX, multiplier) { // This will calculate the tile bitmask value for any tracks placed / removed. See the bottom of the file for a diagram of the bitmask.
   let latest = trackGrid[tileY][tileX].track.length - 1
   let trackRotation = trackGrid[tileY][tileX].track[latest]
-  console.log(trackRotation)
+  console.log(trackRotation + "TRACKROTATION")
   switch (trackRotation){
     case 1:
       trackGrid[tileY][tileX].trackBitmask += multiplier * 8
@@ -264,7 +279,7 @@ function calculateBitmask(tileY, tileX, multiplier) { // This will calculate the
 }
 
 function buildTrack() {
-  if((!trackGrid[tileY][tileX].hasTrackThere(rotation)) && (trackGrid[tileY][tileX].locked == false) && (mapState[tileY][tileX] == 0)) {
+  if((!trackGrid[tileY][tileX].hasTrackThere(rotation)) && (trackGrid[tileY][tileX].locked == false) && (mapState[tileY][tileX] == 0) && (mapObstacles[tileY][tileX] == 0)) {
     trackGrid[tileY][tileX].addTrack(rotation)
     calculateBitmask(tileY, tileX, 1)
     playerMoney -= 100

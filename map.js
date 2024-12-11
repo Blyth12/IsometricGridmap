@@ -60,10 +60,6 @@ function preload() {
 
   stations = [
     loadImage("img/station/white.png"),
-    // loadImage("img/station/blue.png"),
-    // loadImage("img/station/red.png"),
-    // loadImage("img/station/green.png"),
-    // loadImage("img/station/purple.png"),
   ]
 
   trains = [
@@ -236,6 +232,26 @@ function drawObstacle(gx, gy) {
   }
 }
 
+function obstacleHover(tileX, tileY) {
+  if (gameMode == 3) {
+    switch (mapObstacles[tileY][tileX]) {
+      case 0:
+        break
+      case 1:
+        push()
+        textSize(20)
+        text(10000 , mouseX , mouseY)
+        pop()
+        break
+      case 2:
+        push()
+        textSize(20)
+        text(1000 , mouseX , mouseY)
+        pop()
+    }
+  }
+}
+
 
 //Tile drawing + hovering
 function drawTile(gx, gy) {
@@ -261,8 +277,8 @@ function drawTrains(gx, gy) {
   for (let i = 0; i < activeTrains.length; i++) {
     if (gx == activeTrains[i].x && gy == activeTrains[i].y) {
       push()
-      let centerX = (offX + tileOffsetC / 2) - 10
-      let centerY = offY + tileOffsetR
+      let centerX = (offX + tileOffsetC / 2) - 5
+      let centerY = (offY + tileOffsetR) - 8
       translate(centerX , centerY) // Sets origin to the tile the train is on to rotate properly
       angleMode(DEGREES)
       imageMode(CENTER)
@@ -346,100 +362,85 @@ function drawJunctionArrow(gx, gy) {
     imageMode(CENTER)
     // console.log(junctionArrowType)
     if ((junctionArrowType & TRACKJUNCTION.NWSE[0]) == TRACKJUNCTION.NWSE[0]) {
-      console.log("j1")
-      if (trackGrid[gy][gx].activeJunction == 1) {rotate(270)}
-      else {rotate(315)}
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(315)}
+      else {rotate(270)}
     }
 
     if ((junctionArrowType & TRACKJUNCTION.NWSE[1]) == TRACKJUNCTION.NWSE[1]) {
-      console.log("j2")
-      if (trackGrid[gy][gx].activeJunction == 1) {rotate(270)}
-      else {rotate(225)}
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(225)}
+      else {rotate(270)}
     }
 
     if ((junctionArrowType & TRACKJUNCTION.NWSE[2]) == TRACKJUNCTION.NWSE[2]) {
-      console.log("j3")
-      if (trackGrid[gy][gx].activeJunction == 1) {rotate(90)}
-      else {rotate(135)}
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(135)}
+      else {rotate(90)}
     }
 
     if ((junctionArrowType & TRACKJUNCTION.NWSE[3]) == TRACKJUNCTION.NWSE[3]) {
-      console.log("j4")
-      if (trackGrid[gy][gx].activeJunction == 1) {rotate(90)}
-      else {rotate(45)}
+      if (trackGrid[gy][gx].activeJunction == 1) {rotate(45)}
+      else {rotate(90)}
     }
 
     if ((junctionArrowType & TRACKJUNCTION.NS[0]) == TRACKJUNCTION.NS[0]) {
-      console.log("j5")
       if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
       else {rotate(305)}
     }
 
     if ((junctionArrowType & TRACKJUNCTION.NS[1]) == TRACKJUNCTION.NS[1]) {
-      console.log("j6")
       if (trackGrid[gy][gx].activeJunction == 1) {rotate(270)}
       else {rotate(305)}
     }
 
     if ((junctionArrowType & TRACKJUNCTION.NS[2]) == TRACKJUNCTION.NS[2]) {
-      console.log("j7")
       if (trackGrid[gy][gx].activeJunction == 1) {rotate(90)}
       else {rotate(125)}
     }
 
     if ((junctionArrowType & TRACKJUNCTION.NS[3]) == TRACKJUNCTION.NS[3]) {
-      console.log("j8")
       if (trackGrid[gy][gx].activeJunction == 1) {rotate(180)}
       else {rotate(125)}
     }
 
     if ((junctionArrowType & TRACKJUNCTION.SWNE[0]) == TRACKJUNCTION.SWNE[0]) {
-      console.log("j9")
       if (trackGrid[gy][gx].activeJunction == 1) {rotate(315)}
       else {rotate(0)}
     }
 
     if ((junctionArrowType & TRACKJUNCTION.SWNE[1]) == TRACKJUNCTION.SWNE[1]) {
-      console.log("j10")
       if (trackGrid[gy][gx].activeJunction == 1) {rotate(45)}
       else {rotate(0)}
     }
 
     if ((junctionArrowType & TRACKJUNCTION.SWNE[2]) == TRACKJUNCTION.SWNE[2]) {
-      console.log("j11")
       if (trackGrid[gy][gx].activeJunction == 1) {rotate(125)}
       else {rotate(180)}
     }
 
     if ((junctionArrowType & TRACKJUNCTION.SWNE[3]) == TRACKJUNCTION.SWNE[3]) {
-      console.log("j12")
       if (trackGrid[gy][gx].activeJunction == 1) {rotate(235)}
       else {rotate(180)}
     }
 
     if ((junctionArrowType & TRACKJUNCTION.EW[0]) == TRACKJUNCTION.EW[0]) {
-      console.log("j13")
       if (trackGrid[gy][gx].activeJunction == 1) {rotate(0)}
       else {rotate(55)}
     }
 
     if ((junctionArrowType & TRACKJUNCTION.EW[1]) == TRACKJUNCTION.EW[1]) {
-      console.log("j14")
       if (trackGrid[gy][gx].activeJunction == 1) {rotate(90)}
       else {rotate(55)}
     }
 
     if ((junctionArrowType & TRACKJUNCTION.EW[2]) == TRACKJUNCTION.EW[2]) {
-      console.log("j15")
       if (trackGrid[gy][gx].activeJunction == 1) {rotate(270)}
       else {rotate(235)}
     }
 
     if ((junctionArrowType & TRACKJUNCTION.EW[3]) == TRACKJUNCTION.EW[3]) {
-      console.log("j16")
       if (trackGrid[gy][gx].activeJunction == 1) {rotate(180)}
       else {rotate(235)}
     }
+    tint("white")
     image(junctionArrow[0], 0, 0)
     pop()
   }
@@ -457,7 +458,7 @@ function junctionSwitch(gx, gy) { //  Draw junction switch
       let radX = tileOffsetC / 3
       let radY = tileOffsetR / 3
       ellipse(x , y , radX * 2, radY * 2) //Elipse centre x y
-      // text(trackGrid[gy][gx].activeJunction ,x , y)
+      text(trackGrid[gy][gx].activeJunction ,x , y)
     }
     
     if (trackGrid[gy][gy].occupied == false) {
@@ -468,7 +469,7 @@ function junctionSwitch(gx, gy) { //  Draw junction switch
       let radX = tileOffsetC / 3
       let radY = tileOffsetR / 3
       ellipse(x , y , radX * 2, radY * 2) //Elipse centre x y
-      // text(trackGrid[gy][gx].activeJunction ,x , y)
+      text(trackGrid[gy][gx].activeJunction ,x , y)
     }
   }
 }
@@ -606,6 +607,8 @@ function mouseMoved() {
 
   tileX = floor(mX / tileOffsetC - mY / tileOffsetR) + 1
   tileY = floor(mX / tileOffsetC + mY / tileOffsetR)
+
+  obstacleHover(tileX, tileY)
 }
 
 
@@ -746,8 +749,9 @@ function beginGame() {
   createRandomStation()
   setInterval(monitorGame, 100)
   setInterval(tick, 1000)
-  setInterval(createRandomStation, 100000)
+  setInterval(createRandomStation, 60000)
   setInterval(moveTrains, 1000)
+  setInterval(checkTrainSpawns, 1000) 
 }
 
 
