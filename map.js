@@ -23,6 +23,7 @@ const maxZoom = 3
 let gameMode = 2 // 1: view, 2: build, 3: delete
 let rotation = 1 // 1: NS, 2: EW, 3: SE, 4: NW
 let newMode
+let clearedTrains = 0
 let playerMoney = 10000
 
 let colours = ["red", "orange", "green", "blue", "violet"]
@@ -147,6 +148,7 @@ function draw() {
       drawTrains(gx, gy)
       drawBuildings(gx, gy)
       drawObstacle(gx, gy)
+      obstacleHover(gx, gy)
     }
   }
 
@@ -182,20 +184,37 @@ function drawUI() {
   fill(51, 51, 51)
   rect(windowWidth * 0.8 , windowHeight * 0.92, windowWidth * 0.05 , windowHeight * 0.06 , 20)
   fill(255)
-  text(elapsedTime , 0.818 * windowWidth, 0.97 * windowHeight)
+  text(elapsedTime , 0.81 * windowWidth, 0.97 * windowHeight)
 
   stroke(0)
   fill(51, 51, 51)
+  rect(windowWidth * 0.64 , windowHeight * 0.92, windowWidth * 0.14 , windowHeight * 0.06 , 20)
+  fill(255)
+  text(clearedTrains + "/25 trains" , 0.65 * windowWidth, 0.97 * windowHeight)
+
+  stroke(0)
+  fill(51, 51, 51)
+  if (gameMode == 1) {
+    fill("green")
+  }
   rect(windowWidth * 0.03 , windowHeight * 0.92, windowWidth * 0.15 , windowHeight * 0.06 , 20)
   fill(255)
   text("MANAGE", windowWidth * 0.05 , windowHeight * 0.92 + windowHeight * 0.05)
 
+
   fill(51, 51, 51)
+  if (gameMode == 2) {
+    fill("green")
+  }
   rect(windowWidth * 0.20 , windowHeight * 0.92, windowWidth * 0.15 , windowHeight * 0.06, 20)
   fill(255)
   text("BUILD", windowWidth * 0.235 , windowHeight * 0.92 + windowHeight * 0.05)
 
+
   fill(51, 51, 51)
+  if (gameMode == 3) {
+    fill("green")
+  }
   rect(windowWidth * 0.37 , windowHeight * 0.92, windowWidth * 0.15 , windowHeight * 0.06, 20)
   fill(255)
   text("DELETE", windowWidth * 0.395 , windowHeight * 0.92 + windowHeight * 0.05)
@@ -232,21 +251,23 @@ function drawObstacle(gx, gy) {
   }
 }
 
-function obstacleHover(tileX, tileY) {
-  if (gameMode == 3) {
+function obstacleHover(gx, gy) {
+  if (gameMode == 3 && gx == tileX && gy == tileY) {
     switch (mapObstacles[tileY][tileX]) {
       case 0:
         break
       case 1:
         push()
         textSize(20)
-        text(10000 , mouseX , mouseY)
+        fill("red")
+        text("€5000" , mouseX , mouseY)
         pop()
         break
       case 2:
         push()
         textSize(20)
-        text(1000 , mouseX , mouseY)
+        fill("red")
+        text("€1000" , mouseX , mouseY)
         pop()
     }
   }
@@ -284,28 +305,28 @@ function drawTrains(gx, gy) {
       imageMode(CENTER)
       switch(activeTrains[i].direction) {
         case 0:
-          rotate(270, offX, offY)
+          rotate(270)
           break
         case 1:
-          rotate(305, offX, offY)
+          rotate(305)
           break
         case 2:
-          rotate(0, offX, offY)
+          rotate(0)
           break
         case 3:
-          rotate(60, offX, offY)
+          rotate(60)
           break
         case 4:
-          rotate(90, offX, offY)
+          rotate(90)
           break
         case 5:
-          rotate(105, offX, offY)
+          rotate(105)
           break
         case 6:
-          rotate(180, offX, offY)
+          rotate(180)
           break
         case 7:
-          rotate(240, offX, offY)
+          rotate(240)
           break
       }
 
@@ -449,28 +470,15 @@ function drawJunctionArrow(gx, gy) {
 function junctionSwitch(gx, gy) { //  Draw junction switch
   if (gameMode == 1 && trackGrid[gy][gx].trackType == 3) {
     let x = gx * tileOffsetC / 2 + gy * tileOffsetC / 2 + originX + 50
-    let y = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY + 42.5
-    if (trackGrid[gy][gy].occupied == true) {
-      stroke(0)
-      noFill()
-      noStroke()
-      fill(255, 100, 150, 150)
-      let radX = tileOffsetC / 3
-      let radY = tileOffsetR / 3
-      ellipse(x , y , radX * 2, radY * 2) //Elipse centre x y
-      text(trackGrid[gy][gx].activeJunction ,x , y)
-    }
-    
-    if (trackGrid[gy][gy].occupied == false) {
-      stroke(0)
-      noFill()
-      noStroke()
-      fill(100, 255, 150, 150)
-      let radX = tileOffsetC / 3
-      let radY = tileOffsetR / 3
-      ellipse(x , y , radX * 2, radY * 2) //Elipse centre x y
-      text(trackGrid[gy][gx].activeJunction ,x , y)
-    }
+    let y = gy * tileOffsetR / 2 - gx * tileOffsetR / 2 + originY + 42.5  
+    stroke(0)
+    noFill()
+    noStroke()
+    fill(100, 255, 150, 150)
+    let radX = tileOffsetC / 3
+    let radY = tileOffsetR / 3
+    ellipse(x , y , radX * 2, radY * 2) //Elipse centre x y
+    text(trackGrid[gy][gx].activeJunction ,x , y)
   }
 }
 
@@ -607,8 +615,6 @@ function mouseMoved() {
 
   tileX = floor(mX / tileOffsetC - mY / tileOffsetR) + 1
   tileY = floor(mX / tileOffsetC + mY / tileOffsetR)
-
-  obstacleHover(tileX, tileY)
 }
 
 
@@ -669,10 +675,6 @@ function changeMode(newMode) {
   gameMode = newMode
 }
 
-//https://www.istockphoto.com/vector/railway-kit-gm1450125259-487130540
-//write build mode + trCK PLACMENT ALGORITHMS
-//https://kenney.nl/assets/train-kit
-
 let elapsedTime = 0
 
 function tick() {
@@ -682,6 +684,10 @@ function tick() {
 function monitorGame() {
   if (playerMoney <= 0) {
     console.log("LOOSER")
+    window.location.href = 'index.html'
+  }
+  if (clearedTrains >= 25) {
+    console.log("WINNER")
     window.location.href = 'index.html'
   }
 }

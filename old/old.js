@@ -78,41 +78,45 @@
 
 
 
-let TRACK_STRAIGHT = [
-  TRACKDIR.N + TRACKDIR.S,
-  TRACKDIR.E + TRACKDIR.W,
-  TRACKDIR.SW + TRACKDIR.NE,
-  TRACKDIR.NW + TRACKDIR.SE]
+// let TRACK_STRAIGHT = [
+//   TRACKDIR.N + TRACKDIR.S,
+//   TRACKDIR.E + TRACKDIR.W,
+//   TRACKDIR.SW + TRACKDIR.NE,
+//   TRACKDIR.NW + TRACKDIR.SE]
 
-let TRACK_CURVE = [
-]
+// let TRACK_CURVE = [
+// ]
 
-let TRACK_JUNCTION = []
+// let TRACK_JUNCTION = []
 
-let TRACK_CROSSROAD = []
+// let TRACK_CROSSROAD = []
 
 
-const TRACKDIR = {  // Each directions bitmask consant
-  N: 2,
-  NE: 4,
-  E: 8,
-  SE: 16,
-  S: 32,
-  SW: 64,
-  W: 128,
-  NW: 1
-}
+// const TRACKDIR = {  // Each directions bitmask consant
+//   N: 2,
+//   NE: 4,
+//   E: 8,
+//   SE: 16,
+//   S: 32,
+//   SW: 64,
+//   W: 128,
+//   NW: 1
+// }
 
-const TRACKSTRAIGHT = { // Every directions values. This means that north could be any combinations of bitmasks for N , NE and NW, same for every other direction.
-  NS: TRACKDIR.N + TRACKDIR.S,
-  EW: TRACKDIR.E + TRACKDIR.W,
-  SWNE: TRACKDIR.SW + TRACKDIR.NE,
-  NWSE: TRACKDIR.NW + TRACKDIR.SE
-}
+// const TRACKSTRAIGHT = { // Every directions values. This means that north could be any combinations of bitmasks for N , NE and NW, same for every other direction.
+//   NS: TRACKDIR.N + TRACKDIR.S,
+//   EW: TRACKDIR.E + TRACKDIR.W,
+//   SWNE: TRACKDIR.SW + TRACKDIR.NE,
+//   NWSE: TRACKDIR.NW + TRACKDIR.SE
+// }
 
-const TRACKJUNCTION = {
-  0: TRACKSTRAIGHT.NS + (TRACKDIR.NE | TRACKDIR.SE | TRACKDIR.NW | TRACKDIR.SW),
-  1: TRACKSTRAIGHT.EW + (TRACKDIR.NE | TRACKDIR.SE | TRACKDIR.NW | TRACKDIR.SW),
-  2: TRACKSTRAIGHT.SWNE + (TRACKDIR.S | TRACKDIR.E | TRACKDIR.N | TRACKDIR.W),
-  3: TRACKSTRAIGHT.NWSE + (TRACKDIR.S | TRACKDIR.E | TRACKDIR.N | TRACKDIR.W)
-}
+// const TRACKJUNCTION = {
+//   0: TRACKSTRAIGHT.NS + (TRACKDIR.NE | TRACKDIR.SE | TRACKDIR.NW | TRACKDIR.SW),
+//   1: TRACKSTRAIGHT.EW + (TRACKDIR.NE | TRACKDIR.SE | TRACKDIR.NW | TRACKDIR.SW),
+//   2: TRACKSTRAIGHT.SWNE + (TRACKDIR.S | TRACKDIR.E | TRACKDIR.N | TRACKDIR.W),
+//   3: TRACKSTRAIGHT.NWSE + (TRACKDIR.S | TRACKDIR.E | TRACKDIR.N | TRACKDIR.W)
+// }
+
+//https://www.istockphoto.com/vector/railway-kit-gm1450125259-487130540
+//write build mode + trCK PLACMENT ALGORITHMS
+//https://kenney.nl/assets/train-kit

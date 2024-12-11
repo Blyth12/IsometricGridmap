@@ -330,11 +330,13 @@ class Train {
             }
             if (this.destination == buildingGrid[this.y][this.x].stationID) { // Destination station
                 playerMoney += 1000 
-                this.removeTrain()
+                removeTrain(this.trainID)
+                clearedTrains += 1
             }
             else { // Wrong station
                 if (originStation == false) {
                     playerMoney -= 1000
+                    removeTrain(this.trainID)
                 }
             }
         }
@@ -345,21 +347,32 @@ class Train {
             // console.log(activeTrains[i].x + ":" + activeTrains[i].y + " - " + this.x + ":" + this.y)
             if (activeTrains[i].trainID != this.trainID && activeTrains[i].x == this.x && activeTrains[i].y == this.y ) {
                 playerMoney -= 1000
-                activeTrains[i].removeTrain()
-                this.removeTrain()
+                let train1 = this.trainID
+                let train2 = activeTrains[i].trainID
+                collisionDamage(train1, train2, this.x, this.y)
             }
         }
     }
+}
 
-    removeTrain() { // do this lil bro
-        activeTrains.pop([this.trainID])
+function removeTrain(a) {
+    for (let i = 0; i < activeTrains.length; i++) {
+        if (activeTrains[i].trainID == a) {
+            activeTrains.pop(i)
+        }
     }
 }
 
-function collisionDamage(a, b) {
-    activeTrains[i].removeTrain()
-    activeTrains[i].removeTrain()
-
+function collisionDamage(a, b, x, y) {
+    for (let i = 0; i < activeTrains.length; i++) {
+        if (activeTrains[i].trainID == a) {
+            activeTrains.pop(i)
+        }
+        if (activeTrains[i].trainID == b) {
+            activeTrains.pop(i)
+        }
+    }
+    despawnTrack(x , y)
 }
 
 function decideDestination(origin) {

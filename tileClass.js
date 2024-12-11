@@ -292,6 +292,13 @@ function spawnTrack(Y , X , R) {
     calculateBitmask(Y, X, 1)
   }
 }
+
+function despawnTrack(x , y) {
+  if(trackGrid[y][x].trackBitmask != 0) {
+    calculateBitmask(y, x, -1)
+    trackGrid[y][x].removeTrack()
+  }
+}
   
 function deleteTrack() {
   if(trackGrid[tileY][tileX].trackBitmask != 0) {
