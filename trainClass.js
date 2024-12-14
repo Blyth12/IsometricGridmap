@@ -356,26 +356,43 @@ class Train {
 }
 
 function removeTrain(a) {
+    let delete1
     for (let i = 0; i < activeTrains.length; i++) {
+        console.log(activeTrains[i])
         if (activeTrains[i].trainID == a) {
-            activeTrains.pop(i)
+            delete1 = i
         }
+    }
+    if (delete1 !== undefined) {
+        activeTrains.splice(delete1, 1)
     }
 }
 
 function collisionDamage(a, b, x, y) {
+    let delete2, delete3
     for (let i = 0; i < activeTrains.length; i++) {
+        console.log(activeTrains[i])
         if (activeTrains[i].trainID == a) {
-            activeTrains.pop(i)
+            delete2 = i
         }
         if (activeTrains[i].trainID == b) {
-            activeTrains.pop(i)
+            delete3 = i
+        }
+    }
+
+    if (delete2 !== undefined && delete3 !== undefined) {
+        if (delete2 > delete3) {
+            activeTrains.splice(delete2, 1)
+            activeTrains.splice(delete3, 1)
+        } else {
+            activeTrains.splice(delete3, 1)
+            activeTrains.splice(delete2, 1)
         }
     }
     despawnTrack(x , y)
 }
 
-function decideDestination(origin) {
+function decideDestination() {
     nextDestination = Math.floor(Math.random() * stationCount)
     return nextDestination
 }
@@ -383,16 +400,19 @@ function decideDestination(origin) {
 
 function spawnTrain(x, y, dir, origin) {
     decideDestination(origin)
+    console.log("Dest:"+nextDestination +" "+ "Origin:"+origin)
     if (nextDestination == origin){
         if (origin != 0) {
             let random = Math.floor(Math.random() * 1)
             if (random == 0) {nextDestination -= 1}
             if (random == 1) {nextDestination += 1}
         }
-        nextDestination += 1
+        else {
+            nextDestination += 1
+        }
     }
     console.log(nextDestination + "DEST")
-    let ID = activeTrains.length + 1
+    let ID = activeTrains.length
     activeTrains.push(new Train(x, y, dir, origin, nextDestination, ID))
 }
 

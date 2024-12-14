@@ -88,12 +88,12 @@ function setup() {
 }
 
 function createObstacles() {
-  for (let obstacleGx = 1; obstacleGx < Xtiles -2 ; obstacleGx++) {
-    for (let obstacleGy = 1; obstacleGy < Ytiles -2 ; obstacleGy++) {
-      let obstacleChance = Math.floor(Math.random() * 20)
-      if (obstacleChance == 1 && trackGrid[obstacleGy][obstacleGx].trackBitmask == 0 && !(buildingGrid[obstacleGy][obstacleGx] instanceof Station) && mapState[obstacleGy][obstacleGx] == 0) {
-        let obstacleNumber = Math.floor(Math.random() * 2) + 1
-        mapObstacles[obstacleGy][obstacleGx] = obstacleNumber
+  for (let obstacleGx = 1; obstacleGx < Xtiles -2 ; obstacleGx++) { // For all tiles minus the 2 tiles on each extreme for the x
+    for (let obstacleGy = 1; obstacleGy < Ytiles -2 ; obstacleGy++) { // For all tiles minus the 2 tiles on each extreme for the y
+      let obstacleChance = Math.floor(Math.random() * 20) // Generate number 0 - 20
+      if (obstacleChance == 1 && trackGrid[obstacleGy][obstacleGx].trackBitmask == 0 && !(buildingGrid[obstacleGy][obstacleGx] instanceof Station) && mapState[obstacleGy][obstacleGx] == 0) { // Check tile is clear
+        let obstacleNumber = Math.floor(Math.random() * 2) + 1 // Generate number 1 - Total amount of obstacles (2 for now)
+        mapObstacles[obstacleGy][obstacleGx] = obstacleNumber // Set map tile to have obstacle
       }
     }
   }
@@ -164,9 +164,9 @@ function drawUI() {
   fill(255)
   noStroke()
   textFont()
-  text(tileX + " " + tileY, 20, 50)
-  text(floor(mouseX) + " " + floor(mouseY), 20, 150) //Debug text
-  text(gameMode + " " + rotation , 20, 250)
+  // text(tileX + " " + tileY, 20, 50)
+  // text(floor(mouseX) + " " + floor(mouseY), 20, 150) //Debug text
+  // text(gameMode + " " + rotation , 20, 250)
 
   fill (0)
   rect(0, windowHeight * 0.89, windowWidth , windowHeight * 0.01 , 0)
@@ -190,7 +190,7 @@ function drawUI() {
   fill(51, 51, 51)
   rect(windowWidth * 0.64 , windowHeight * 0.92, windowWidth * 0.14 , windowHeight * 0.06 , 20)
   fill(255)
-  text(clearedTrains + "/25 trains" , 0.65 * windowWidth, 0.97 * windowHeight)
+  text(clearedTrains + "/10 trains" , 0.65 * windowWidth, 0.97 * windowHeight)
 
   stroke(0)
   fill(51, 51, 51)
@@ -260,14 +260,14 @@ function obstacleHover(gx, gy) {
         push()
         textSize(20)
         fill("red")
-        text("€5000" , mouseX , mouseY)
+        text("€5000" , mX + 25 , mY + 400)
         pop()
         break
       case 2:
         push()
         textSize(20)
         fill("red")
-        text("€1000" , mouseX , mouseY)
+        text("€1000" , mX + 25 , mY + 400)
         pop()
     }
   }
@@ -683,11 +683,9 @@ function tick() {
 
 function monitorGame() {
   if (playerMoney <= 0) {
-    console.log("LOOSER")
     window.location.href = 'index.html'
   }
-  if (clearedTrains >= 25) {
-    console.log("WINNER")
+  if (clearedTrains >= 10) {
     window.location.href = 'index.html'
   }
 }
